@@ -23,11 +23,13 @@ const navItems = ref([
   }
 ])
 
-const { isOpened } = storeToRefs(useMenuStore())
+const menuStore = useMenuStore()
+
+const { isOpened } = storeToRefs(menuStore)
 </script>
 
 <template>
-  <nav-drawer :class="{ open: isOpened }">
+  <nav-drawer :class="isOpened ? 'open' : undefined">
     <nav class="nav">
       <NavigationList
         title="Navigation"
@@ -38,6 +40,10 @@ const { isOpened } = storeToRefs(useMenuStore())
       </NavigationList>
     </nav>
   </nav-drawer>
+  <div
+    class="overlay"
+    @click="menuStore.toggleMenu"
+  ></div>
 </template>
 <style lang="scss">
 nav {

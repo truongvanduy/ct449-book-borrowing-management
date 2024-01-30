@@ -1,4 +1,6 @@
 <script setup>
+import { useMenuStore } from '@/stores/MenuStore'
+
 defineProps({
   name: {
     type: String,
@@ -18,6 +20,8 @@ defineProps({
     default: true
   }
 })
+
+const menuStore = useMenuStore()
 </script>
 
 <template>
@@ -25,6 +29,7 @@ defineProps({
     :to="url"
     tabindex="-1"
     v-slot="{ isActive }"
+    @click="menuStore.toggleMenu"
   >
     <md-list-item
       style="{{ !expanded ? 'width: fit-content' :'' }};"

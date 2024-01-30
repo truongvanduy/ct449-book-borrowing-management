@@ -1,7 +1,12 @@
+<script setup>
+import MenuButton from './navigation/MenuButton.vue'
+</script>
+
 <template>
   <header class="header">
     <!-- Logo -->
     <div class="logo">
+      <MenuButton />
       <md-icon slot="icon">home</md-icon>
     </div>
     <!-- Search -->

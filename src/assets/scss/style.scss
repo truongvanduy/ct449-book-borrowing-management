@@ -1,14 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Open%20Sans:wght@400;500;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
 
+@import './tokens.scss';
 @import './light.scss';
 @import './navigation.scss';
 @import './table.scss';
+@import './layout.scss';
 @import './header.scss';
-@import './dark.scss';
+@import './scrollbar.scss';
+// @import './dark.scss';
 
 :root {
-  // color-scheme: light;
+  color-scheme: light;
   --md-ref-typeface-brand: 'Nunito Sans', 'Open Sans', system-ui, sans-serif;
   --md-ref-typeface-plain: 'Nunito Sans', 'Open Sans', system-ui, sans-serif;
 
@@ -20,29 +23,4 @@ body {
   color: var(--md-sys-color-on-surface);
   font-size: 1rem;
   line-height: 1.5;
-}
-
-// Wrapper
-.main {
-  display: grid;
-  grid-template-columns: var(--navigation-width) 1fr;
-}
-
-::-webkit-scrollbar {
-  width: 0.5rem;
-}
-::-webkit-scrollbar-track {
-  background-color: transparent;
-}
-::-webkit-scrollbar-thumb {
-  border-radius: 9999px;
-  background-color: var(--md-sys-color-outline-variant);
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background-color: var(--md-sys-color-outline);
-}
-
-::-webkit-slider-thumb:target {
-  background-color: var(--md-sys-color-primary);
 }

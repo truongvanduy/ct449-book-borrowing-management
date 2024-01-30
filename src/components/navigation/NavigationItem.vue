@@ -12,6 +12,10 @@ defineProps({
   url: {
     type: String,
     default: '#'
+  },
+  expanded: {
+    type: Boolean,
+    default: true
   }
 })
 </script>
@@ -23,16 +27,22 @@ defineProps({
     v-slot="{ isActive }"
   >
     <md-list-item
+      style="{{ !expanded ? 'width: fit-content' :'' }};"
       :selected="isActive ? 'selected' : undefined"
       interactive
       :href="url"
     >
       <md-icon
-        v-if="icon !== ''"
+        v-if="icon !== '' && expanded"
         slot="start"
         >{{ icon }}</md-icon
       >
-      {{ name }}
+      <template v-if="expanded"> {{ name }} </template>
+      <md-icon
+        v-else
+        slot="headline"
+        >{{ icon }}</md-icon
+      >
     </md-list-item>
   </router-link>
 </template>

@@ -12,19 +12,21 @@ defineProps({
   items: {
     type: Array,
     default: () => []
+  },
+  expanded: {
+    type: Boolean,
+    default: true
   }
 })
 </script>
 
 <template>
-  <md-list
-    class="nav"
-    style="max-width: 300px"
-  >
+  <md-list class="nav">
     <md-item v-if="title">
-      <div slot="headline">{{ title }}</div>
+      <div slot="headline">{{ expanded ? title : '' }}</div>
     </md-item>
     <NavigationItem
+      :expanded="expanded"
       v-for="(item, index) in items"
       :key="index"
       :name="item.name"

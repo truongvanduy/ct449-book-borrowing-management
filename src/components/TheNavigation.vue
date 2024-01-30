@@ -1,7 +1,9 @@
 <script setup>
+import { storeToRefs } from 'pinia'
 import NavigationList from './navigation/NavigationList.vue'
 
 import { ref } from 'vue'
+import { useMenuStore } from '@/stores/MenuStore'
 
 const navItems = ref([
   {
@@ -20,23 +22,26 @@ const navItems = ref([
     url: '/users-management'
   }
 ])
+
+const { isOpened } = storeToRefs(useMenuStore())
 </script>
 
 <template>
-  <nav-drawer>
+  <nav-drawer :class="{ open: isOpened }">
     <nav class="nav">
       <NavigationList
-        title="Natalya"
+        title="Navigation"
         :haveSeparator="false"
         :items="navItems"
+        :expanded="true"
       >
       </NavigationList>
     </nav>
   </nav-drawer>
 </template>
-<style>
+<style lang="scss">
 nav {
-  max-height: calc(100vh - 72px);
+  max-height: calc(100vh - var(--header-height));
   overflow-y: scroll;
 }
 </style>

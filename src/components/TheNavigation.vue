@@ -25,17 +25,18 @@ const navItems = ref([
 
 const menuStore = useMenuStore()
 
-const { isOpened } = storeToRefs(menuStore)
+const { isOpened, isExpanded } = storeToRefs(menuStore)
 </script>
 
 <template>
-  <nav-drawer :class="isOpened ? 'open' : undefined">
-    <nav class="nav">
+  <nav-drawer
+    :data-expanded="isExpanded"
+    :class="isOpened ? 'open' : undefined"
+  >
+    <nav>
       <NavigationList
-        title="Navigation"
         :haveSeparator="false"
         :items="navItems"
-        :expanded="true"
       >
       </NavigationList>
     </nav>
@@ -45,9 +46,3 @@ const { isOpened } = storeToRefs(menuStore)
     @click="menuStore.toggleMenu"
   ></div>
 </template>
-<style lang="scss">
-nav {
-  max-height: calc(100vh - var(--header-height));
-  overflow-y: scroll;
-}
-</style>

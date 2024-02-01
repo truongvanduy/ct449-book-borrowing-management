@@ -27,7 +27,7 @@
   );
 }
 
-@media screen and (max-width: 640px) {
+@media screen and (max-width: $menu-breakpoint) {
   :root {
     --catalog-display-xl-font-size: 55px;
     --catalog-title-l-font-size: 16px;
@@ -136,13 +136,41 @@ h1 {
   margin-block: var(--catalog-spacing-m);
 }
 
+// Navigation
+
+nav-drawer {
+  // &,
+  & nav {
+    will-change: width;
+    transition: width 0.2s linear;
+  }
+  &[data-expanded='true'] nav {
+    width: var(--navigation-width);
+  }
+  &[data-expanded='false'] nav {
+    width: 88px;
+    // transform: scaleX(88px);
+  }
+}
+
+nav {
+  max-height: calc(100vh - var(--header-height));
+  overflow-y: scroll;
+}
+
+// Expand menu items
+
+md-list-item[data-expanded='false'] {
+  width: fit-content;
+}
+
 // Toggle menu
 
 .overlay {
   display: none;
 }
 
-@media screen and (max-width: 640px) {
+@media screen and (max-width: $menu-breakpoint) {
   nav-drawer {
     position: fixed;
     z-index: 2;

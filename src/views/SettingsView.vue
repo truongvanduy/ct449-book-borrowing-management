@@ -1,53 +1,33 @@
 <script setup>
 import { MdList, MdListItem } from '@material/web/all'
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 
 const listItem = ref(null)
-
-onMounted(() => {
-  console.log(listItem.value)
-})
 </script>
 
 <template>
   <h2 class="heading h2">Settings</h2>
   <md-list ref="listItem">
-    <md-list-item
-      interactive
-      type="text"
-      tabindex="0"
-    >
+    <md-list-item type="text">
       <div slot="headline">Fruits</div>
     </md-list-item>
     <md-divider></md-divider>
 
-    <md-list-item
-      interactive
-      type="text"
-      tabindex="0"
-    >
+    <md-list-item type="text">
       Apple
       <md-switch
         slot="end"
         selected
       ></md-switch>
     </md-list-item>
-    <md-list-item
-      interactive
-      type="text"
-      tabindex="0"
-    >
+    <md-list-item type="text">
       Banana
       <md-switch
         slot="end"
         selected
       ></md-switch>
     </md-list-item>
-    <md-list-item
-      interactive
-      type="text"
-      tabindex="0"
-    >
+    <md-list-item type="text">
       <div slot="headline">Cucumber</div>
       <div slot="supporting-text">
         Cucumbers are long green fruits that are just as long as this multi-line description
@@ -58,9 +38,7 @@ onMounted(() => {
       ></md-switch>
     </md-list-item>
     <md-list-item
-      interactive
       type="text"
-      tabindex="0"
       target="_blank"
     >
       <div slot="headline">Shop for Kiwis</div>

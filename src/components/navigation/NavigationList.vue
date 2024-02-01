@@ -1,5 +1,7 @@
 <script setup>
+import { storeToRefs } from 'pinia'
 import NavigationItem from './NavigationItem.vue'
+import { useMenuStore } from '@/stores/MenuStore'
 
 defineProps({
   title: {
@@ -12,21 +14,18 @@ defineProps({
   items: {
     type: Array,
     default: () => []
-  },
-  expanded: {
-    type: Boolean,
-    default: true
   }
 })
+
+const { isExpanded } = storeToRefs(useMenuStore())
 </script>
 
 <template>
   <md-list class="nav">
     <md-item v-if="title">
-      <div slot="headline">{{ expanded ? title : '' }}</div>
+      <div slot="headline">{{ isExpanded ? title : '' }}</div>
     </md-item>
     <NavigationItem
-      :expanded="expanded"
       v-for="(item, index) in items"
       :key="index"
       :name="item.name"

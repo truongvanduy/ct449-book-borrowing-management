@@ -1,24 +1,44 @@
 <script setup>
+import SearchBar from './SearchBar.vue'
 import MenuButton from './navigation/MenuButton.vue'
 </script>
 
 <template>
   <header class="header">
-    <!-- Logo -->
-    <div class="logo">
-      <MenuButton />
-      <md-icon slot="icon">home</md-icon>
+    <div class="header-start">
+      <MenuButton
+        class="toggle-menu"
+        type="toggleMenu"
+      />
+      <MenuButton
+        class="toggle-expand"
+        type="toggleExpand"
+      />
+      <!-- Logo -->
+      <div class="logo">
+        <router-link to="/">
+          <md-icon-button>
+            <md-icon class="material-symbols-rounded">home</md-icon>
+          </md-icon-button>
+        </router-link>
+      </div>
     </div>
     <!-- Search -->
-    <div class="search">
-      <md-outlined-text-field placeholder="Search for books">
-        <md-icon-button slot="leading-icon">
-          <md-icon>search</md-icon>
-        </md-icon-button>
-      </md-outlined-text-field>
-    </div>
+    <SearchBar />
     <div class="user">
       <md-icon slot="icon">account_circle</md-icon>
     </div>
   </header>
 </template>
+
+<style lang="scss">
+.search {
+  --md-outlined-text-field-container-shape: 1.7rem;
+  // --_container-shape: 9999px;
+  & > * {
+    width: 400px;
+    display: block;
+  }
+}
+</style>
+```

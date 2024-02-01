@@ -1,5 +1,7 @@
 <script setup>
 import { useMenuStore } from '@/stores/MenuStore'
+import MdIcon from '../MdIcon.vue'
+import { storeToRefs } from 'pinia'
 
 defineProps({
   name: {
@@ -14,14 +16,12 @@ defineProps({
   url: {
     type: String,
     default: '#'
-  },
-  expanded: {
-    type: Boolean,
-    default: true
   }
 })
 
 const menuStore = useMenuStore()
+
+const { isExpanded } = storeToRefs(menuStore)
 </script>
 
 <template>
@@ -32,22 +32,29 @@ const menuStore = useMenuStore()
     @click="menuStore.toggleMenu"
   >
     <md-list-item
-      style="{{ !expanded ? 'width: fit-content' :'' }};"
+      :data-expanded="isExpanded"
       :selected="isActive ? 'selected' : undefined"
       interactive
       :href="url"
     >
-      <md-icon
-        v-if="icon !== '' && expanded"
+      <MdIcon
+        v-if="icon !== '' && isExpanded"
         slot="start"
-        >{{ icon }}</md-icon
+        :style="isActive ? 'filled' : 'outlined'"
+        >{{ icon }}</MdIcon
       >
-      <template v-if="expanded"> {{ name }} </template>
-      <md-icon
+      <template v-if="isExpanded"> {{ name }} </template>
+      <MdIcon
         v-else
         slot="headline"
-        >{{ icon }}</md-icon
+        :style="isActive ? 'filled' : 'outlined'"
+        >{{ icon }}</MdIcon
       >
     </md-list-item>
   </router-link>
 </template>
+<style>
+md-list-item {
+  --md-outlined-icon-button-container-shape: 999px;
+}
+</style>

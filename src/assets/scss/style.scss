@@ -8,10 +8,10 @@
 @import './layout.scss';
 @import './header.scss';
 @import './scrollbar.scss';
-// @import './dark.scss';
+@import './dark.scss';
 
 :root {
-  color-scheme: light;
+  // color-scheme: light;
   --md-ref-typeface-brand: 'Nunito Sans', 'Open Sans', system-ui, sans-serif;
   --md-ref-typeface-plain: 'Nunito Sans', 'Open Sans', system-ui, sans-serif;
 

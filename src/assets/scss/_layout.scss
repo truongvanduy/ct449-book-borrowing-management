@@ -1,12 +1,21 @@
 :root {
-  --menu-breakpoint: 640px;
-  --header-height: 4.5rem;
+  --menu-breakpoint: $menu-breakpoint;
+  --header-height: 5rem;
   --content-margin: 1rem;
 }
 
+// .main {
+//   display: grid;
+//   transition: grid-template-columns 0.1s linear;
+//   &[data-expanded='true'] {
+//     grid-template-columns: var(--navigation-width) 1fr;
+//   }
+//   &[data-expanded='false'] {
+//     grid-template-columns: auto 1fr;
+//   }
+// }
 .main {
-  display: grid;
-  grid-template-columns: var(--navigation-width) 1fr;
+  display: flex;
 }
 
 .pane {
@@ -16,13 +25,14 @@
 
   background-color: var(--md-sys-color-surface-container-lowest);
   background-color: var(--md-sys-color-surface);
-  margin: var(--content-margin) var(--content-margin) var(--content-margin) 0;
+  margin: 0 var(--content-margin) var(--content-margin) 0;
 
   border-radius: var(--catalog-shape-xl);
   box-shadow: rgba(99, 99, 99, 0.05) 0px 2px 8px 0px;
+  flex: 1;
 }
 
-@media screen and (max-width: 640px) {
+@media screen and (max-width: $menu-breakpoint) {
   .pane {
     margin: var(--content-margin);
   }
@@ -38,8 +48,21 @@
   padding: var(--catalog-spacing-xl);
 }
 
-@media screen and (width < 640px) {
+.toggle-menu {
+  display: none;
+}
+
+@media screen and (width < $menu-breakpoint) {
   .main {
     grid-template-columns: 1fr;
+  }
+
+  .toggle {
+    &-menu {
+      display: inline-flex;
+    }
+    &-expand {
+      display: none;
+    }
   }
 }

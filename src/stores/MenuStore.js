@@ -8,8 +8,11 @@ export const useMenuStore = defineStore('menuStore', {
   actions: {
     toggleMenu() {
       this.isOpened = !this.isOpened
+      if (this.isOpened) {
+        this.isExpanded = true
+      }
     },
-    toggleExpanded() {
+    toggleExpand() {
       this.isExpanded = !this.isExpanded
     }
   }

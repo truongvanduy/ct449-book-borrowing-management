@@ -1,19 +1,3 @@
-:root {
-  --menu-breakpoint: $menu-breakpoint;
-  --header-height: 5rem;
-  --content-margin: 1rem;
-}
-
-// .main {
-//   display: grid;
-//   transition: grid-template-columns 0.1s linear;
-//   &[data-expanded='true'] {
-//     grid-template-columns: var(--navigation-width) 1fr;
-//   }
-//   &[data-expanded='false'] {
-//     grid-template-columns: auto 1fr;
-//   }
-// }
 .main {
   display: flex;
 }

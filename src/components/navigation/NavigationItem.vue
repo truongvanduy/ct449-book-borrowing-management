@@ -29,13 +29,13 @@ const { isExpanded } = storeToRefs(menuStore)
     :to="url"
     tabindex="-1"
     v-slot="{ isActive }"
-    @click="menuStore.toggleMenu"
   >
     <md-list-item
+      @click="menuStore.toggleMenu"
       :data-expanded="isExpanded"
       :selected="isActive ? 'selected' : undefined"
       interactive
-      :href="url"
+      type="button"
     >
       <MdIcon
         v-if="icon !== '' && isExpanded"

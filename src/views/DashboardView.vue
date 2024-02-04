@@ -54,18 +54,4 @@
     <md-input-chip label="Input"></md-input-chip>
     <md-suggestion-chip label="Suggestion"></md-suggestion-chip>
   </md-chip-set>
-
-  <form>
-    <!-- <md-filled-text-field
-      name="name"
-      label="Name"
-      required
-    >
-    </md-filled-text-field> -->
-    <input type="text" />
-    <md-filled-button type="submit">
-      <md-icon slot="icon">search</md-icon>
-    </md-filled-button>
-    <!-- <button type="submit">abc</button> -->
-  </form>
 </template>

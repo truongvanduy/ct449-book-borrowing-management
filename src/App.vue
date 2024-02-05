@@ -1,10 +1,18 @@
 <script setup>
 import TheNavigation from './components/TheNavigation.vue'
 import TheHeader from './components/TheHeader.vue'
+import { useThemeStore } from './stores/ThemeStore'
+import { storeToRefs } from 'pinia'
+
+const themeStore = useThemeStore()
+const { theme } = storeToRefs(themeStore)
 </script>
 
 <template>
-  <div class="wrapper">
+  <div
+    class="wrapper"
+    :class="theme"
+  >
     <TheHeader />
     <main class="main">
       <TheNavigation />

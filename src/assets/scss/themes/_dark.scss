@@ -1,5 +1,5 @@
 @media (prefers-color-scheme: dark) {
-  .wrapper.dark {
+  :root:has(.wrapper.dark) {
     --md-sys-color-primary: rgb(166 200 255);
     --md-sys-color-surface-tint: rgb(166 200 255);
     --md-sys-color-on-primary: rgb(2 49 94);

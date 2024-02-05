@@ -1,10 +1,14 @@
 <script setup>
+import MdIcon from './MdIcon.vue'
 import SearchBar from './SearchBar.vue'
 import MenuButton from './navigation/MenuButton.vue'
+import MdIconButton from './buttons/MdIconButton.vue'
+import ThemePicker from './ThemePicker.vue'
 </script>
 
 <template>
   <header class="header">
+    <!-- Start -->
     <div class="header-start">
       <MenuButton
         class="toggle-menu"
@@ -25,8 +29,10 @@ import MenuButton from './navigation/MenuButton.vue'
     </div>
     <!-- Search -->
     <SearchBar />
-    <div class="user">
-      <md-icon slot="icon">account_circle</md-icon>
+    <!-- End -->
+    <div class="header-end">
+      <MdIconButton>account_circle</MdIconButton>
+      <ThemePicker />
     </div>
   </header>
 </template>

@@ -6,7 +6,7 @@
 
 .pane {
   max-height: 100%;
-  height: calc(100dvh - var(--header-height) - var(--content-margin) * 2);
+  height: calc(100dvh - var(--header-height) - var(--content-margin));
   overflow: auto;
 
   background-color: var(--md-sys-color-surface-container-lowest);

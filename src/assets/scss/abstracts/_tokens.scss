@@ -29,19 +29,7 @@ $menu-breakpoint: 64em;
     var(--catalog-top-app-bar-height) + var(--catalog-top-app-bar-padding-block) * 2
   );
 
-  /*** Layout spacing ***/
-  --navigation-expanded-width: 18.75rem;
-  --navigation-collapsed-width: 5.5rem;
-  --header-height: 5rem;
-  --content-margin: 1rem;
-
-  /*** Transtion ***/
-  --transition-time: 0.2s;
-  --transtion-timing-function: linear;
-}
-
-@media screen and (max-width: $menu-breakpoint) {
-  :root {
+  @media screen and (max-width: $menu-breakpoint) {
     --catalog-display-xl-font-size: 3.4375rem;
     --catalog-title-l-font-size: 1rem;
     --catalog-body-l-font-size: 0.875rem;
@@ -49,4 +37,17 @@ $menu-breakpoint: 64em;
     --catalog-spacing-xl: 1rem;
     --catalog-spacing-l: 0.75rem;
   }
+
+  /*** Layout spacing ***/
+  --navigation-expanded-width: 18.75rem;
+  --navigation-collapsed-width: 5.5rem;
+  --header-height: 5rem;
+  --content-margin: 1rem;
+  // Search bar
+  --search-max-width: 25rem;
+  --input-min-width: 10rem;
+
+  /*** Transtion ***/
+  --transition-time: 0.2s;
+  --transtion-timing-function: linear;
 }

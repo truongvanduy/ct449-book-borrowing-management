@@ -35,4 +35,4 @@ function onEnter(e) {
   </form>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" src="../assets/scss/components/_search.scss"></style>

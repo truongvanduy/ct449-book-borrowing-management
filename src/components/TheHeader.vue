@@ -30,15 +30,3 @@ import MenuButton from './navigation/MenuButton.vue'
     </div>
   </header>
 </template>
-
-<style lang="scss">
-.search {
-  --md-outlined-text-field-container-shape: 1.7rem;
-  // --_container-shape: 9999px;
-  & > * {
-    width: 400px;
-    display: block;
-  }
-}
-</style>
-```

@@ -1,6 +1,6 @@
 // index.js
-import '@material/web/all.js'
 import '@/assets/scss/style.scss'
+import '@material/web/all.js'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'

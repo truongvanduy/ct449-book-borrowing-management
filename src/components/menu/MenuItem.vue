@@ -1,5 +1,5 @@
 <script setup>
-import MdIcon from '../MdIcon.vue'
+import MdIcon from '../icons/MdIcon.vue'
 
 defineProps({
   name: {

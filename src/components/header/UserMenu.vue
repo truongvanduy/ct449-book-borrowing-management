@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import IconMenu from './menu/IconMenu.vue'
+import IconMenu from '../menu/IconMenu.vue'
 
 const menuItems = ref([
   {

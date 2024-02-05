@@ -6,7 +6,7 @@
  */
 
 import { useMenuStore } from '@/stores/MenuStore'
-import MdIcon from '../MdIcon.vue'
+import MdIcon from '../icons/MdIcon.vue'
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 
 defineProps({

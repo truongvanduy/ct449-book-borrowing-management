@@ -1,6 +1,6 @@
 <script setup>
 import { useMenuStore } from '@/stores/MenuStore'
-import MdIcon from '../MdIcon.vue'
+import MdIcon from '../icons/MdIcon.vue'
 import { storeToRefs } from 'pinia'
 
 defineProps({

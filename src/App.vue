@@ -1,6 +1,6 @@
 <script setup>
-import TheNavigation from './components/TheNavigation.vue'
-import TheHeader from './components/TheHeader.vue'
+import TheNavigation from './components/navigation/TheNavigation.vue'
+import TheHeader from './components/header/TheHeader.vue'
 import { useThemeStore } from './stores/ThemeStore'
 import { storeToRefs } from 'pinia'
 

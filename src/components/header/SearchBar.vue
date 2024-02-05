@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import MdIcon from './MdIcon.vue'
+import MdIcon from '../icons/MdIcon.vue'
 
 const form = ref(null)
 const searchField = ref(null)
@@ -35,4 +35,4 @@ function onEnter(e) {
   </form>
 </template>
 
-<style lang="scss" src="../assets/scss/components/_search.scss"></style>
+<style lang="scss" src="../../assets/scss/components/_search.scss"></style>

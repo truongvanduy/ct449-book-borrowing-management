@@ -1,8 +1,7 @@
 <script setup>
-import MdIcon from './MdIcon.vue'
 import SearchBar from './SearchBar.vue'
-import MenuButton from './navigation/MenuButton.vue'
-import MdIconButton from './buttons/MdIconButton.vue'
+import NavigationButton from '../navigation/NavigationButton.vue'
+import MdIconButton from '../buttons/MdIconButton.vue'
 import ThemePicker from './ThemePicker.vue'
 import UserMenu from './UserMenu.vue'
 </script>
@@ -11,11 +10,11 @@ import UserMenu from './UserMenu.vue'
   <header class="header">
     <!-- Start -->
     <div class="header-start">
-      <MenuButton
+      <NavigationButton
         class="toggle-menu"
         type="toggleMenu"
       />
-      <MenuButton
+      <NavigationButton
         class="toggle-expand"
         type="toggleExpand"
       />

@@ -1,7 +1,7 @@
 <script setup>
 import { useThemeStore } from '@/stores/ThemeStore'
 import { storeToRefs } from 'pinia'
-import MdIconButton from './buttons/MdIconButton.vue'
+import MdIconButton from '../buttons/MdIconButton.vue'
 
 const themeStore = useThemeStore()
 const { theme } = storeToRefs(themeStore)

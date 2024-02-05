@@ -4,6 +4,7 @@ import SearchBar from './SearchBar.vue'
 import MenuButton from './navigation/MenuButton.vue'
 import MdIconButton from './buttons/MdIconButton.vue'
 import ThemePicker from './ThemePicker.vue'
+import UserMenu from './UserMenu.vue'
 </script>
 
 <template>
@@ -31,7 +32,7 @@ import ThemePicker from './ThemePicker.vue'
     <SearchBar />
     <!-- End -->
     <div class="header-end">
-      <MdIconButton>account_circle</MdIconButton>
+      <UserMenu />
       <ThemePicker />
     </div>
   </header>

@@ -2,7 +2,6 @@
 defineProps({
   style: {
     type: String,
-    required: true,
     default: 'outlined'
   }
 })

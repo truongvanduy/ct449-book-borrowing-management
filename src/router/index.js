@@ -17,6 +17,11 @@ const router = createRouter({
       path: '/users-management',
       name: 'users-management',
       component: () => import('../views/UsersManagementView.vue')
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'FallBack',
+      component: () => import('../views/DashboardView.vue')
     }
   ],
   linkActiveClass: 'active'

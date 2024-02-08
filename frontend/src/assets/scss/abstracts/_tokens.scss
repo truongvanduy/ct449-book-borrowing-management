@@ -1,0 +1,55 @@
+// As custom properties are not supported in @media queries, Sass variables are used to define the breakpoint.
+$menu-breakpoint: 64em;
+
+:root {
+  /*** Typography ***/
+  --catalog-display-xl-font-size: 5.5rem;
+  --catalog-display-xl-font-size: 3.75rem;
+  --catalog-display-m-font-size: 2.8125rem;
+  --catalog-title-l-font-size: 1.375rem;
+  --catalog-title-m-font-size: 1rem;
+  --catalog-title-s-font-size: 0.875rem;
+  --catalog-body-l-font-size: 1rem;
+  --catalog-body-m-font-size: 0.875rem;
+  --catalog-headline-s-font-size: 1.5rem;
+  --catalog-label-s-font-size: 0.6875rem;
+  --md-ref-typeface-brand: 'Nunito Sans', 'Open Sans', system-ui, sans-serif;
+  --md-ref-typeface-plain: 'Nunito Sans', 'Open Sans', system-ui, sans-serif;
+
+  /*** Shapes ***/
+  --catalog-shape-xl: 1.75rem;
+  --catalog-shape-l: 1rem;
+  --catalog-shape-m: 0.75rem;
+  --catalog-shape-s: 0.5rem;
+  --catalog-shape-xs: 0.25rem;
+  --catalog-spacing-xl: 1.75rem;
+  --catalog-spacing-l: 1rem;
+  --catalog-spacing-m: 0.75rem;
+  --catalog-spacing-s: 0.5rem;
+  --catalog-top-app-bar-height: calc(3rem + 2 * var(--catalog-spacing-m));
+  scroll-padding-block-start: calc(
+    var(--catalog-top-app-bar-height) + var(--catalog-top-app-bar-padding-block) * 2
+  );
+
+  @media screen and (max-width: $menu-breakpoint) {
+    --catalog-display-xl-font-size: 3.4375rem;
+    --catalog-title-l-font-size: 1rem;
+    --catalog-body-l-font-size: 0.875rem;
+    --catalog-body-m-font-size: 0.75rem;
+    --catalog-spacing-xl: 1rem;
+    --catalog-spacing-l: 0.75rem;
+  }
+
+  /*** Layout spacing ***/
+  --navigation-expanded-width: 18.75rem;
+  --navigation-collapsed-width: 5.5rem;
+  --header-height: 5rem;
+  --content-margin: 1rem;
+  // Search bar
+  --search-max-width: 25rem;
+  --input-min-width: 10rem;
+
+  /*** Transtion ***/
+  --transition-time: 0.2s;
+  --transtion-timing-function: linear;
+}

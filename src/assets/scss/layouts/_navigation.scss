@@ -1,4 +1,5 @@
-@use '../abstracts' as *;
+@use '../abstracts/' as *;
+@use '../vendors/' as *;
 
 /*=============
  * Navigation
@@ -43,7 +44,7 @@ md-list-item[data-expanded='false'] {
     top: var(--header-height);
     left: 0;
     bottom: 0;
-    margin-block: 1rem;
+    margin-block: var(--content-margin, 1rem);
     border-top-right-radius: var(--catalog-shape-xl);
     border-bottom-right-radius: var(--catalog-shape-xl);
     background-color: var(--md-sys-color-surface-container);
@@ -147,10 +148,6 @@ nav-drawer md-list.nav md-item {
 
 nav-drawer md-list.nav md-item + md-list-item[href] {
   margin-block-start: 0;
-}
-
-h1 {
-  font-size: var(--catalog-display-xl-font-size);
 }
 
 .toc ol {

@@ -1,5 +1,5 @@
 <template>
-  <h1 class="heading h1">Dashboard</h1>
+  <h1 class="fs-1">Dashboard</h1>
   <md-outlined-select>
     <md-select-option aria-label="blank"></md-select-option>
     <md-select-option

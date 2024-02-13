@@ -1,4 +1,4 @@
-@use '../abstracts' as *;
+@use '../utilities/variables' as *;
 
 .main {
   display: flex;
@@ -20,7 +20,8 @@
 
 @media screen and (max-width: $menu-breakpoint) {
   .pane {
-    margin: var(--content-margin);
+    margin-block-end: var(--content-margin);
+    margin-inline: var(--content-margin);
   }
 }
 

@@ -1,3 +1,19 @@
+<script setup>
+import { ref, onMounted } from 'vue'
+
+const book = ref(null)
+
+onMounted(async () => {
+  const response = await fetch('https://www.googleapis.com/books/v1/volumes?q=javascript')
+  if (!response.ok) {
+    throw new Error('Network response was not ok')
+  } else {
+    book.value = await response.json()
+    console.log(book.value.items[0])
+  }
+})
+</script>
+
 <template>
   <h1 class="heading h1">Dashboard</h1>
   <md-outlined-select>
@@ -54,4 +70,17 @@
     <md-input-chip label="Input"></md-input-chip>
     <md-suggestion-chip label="Suggestion"></md-suggestion-chip>
   </md-chip-set>
+  <template v-if="book">
+    <div
+      v-for="item in book.items"
+      :key="item.id"
+    >
+      <h2>{{ item.volumeInfo.title }}</h2>
+      <p>{{ item.volumeInfo.authors }}</p>
+      <!-- <img
+        :src="item.volumeInfo.imageLinks.thumbnail"
+        alt="book cover"
+      /> -->
+    </div>
+  </template>
 </template>

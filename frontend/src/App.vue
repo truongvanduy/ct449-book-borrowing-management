@@ -19,7 +19,7 @@ const { theme } = storeToRefs(themeStore)
       <!-- <TheContent /> -->
       <div class="pane">
         <div class="scroll-wrapper">
-          <div class="content">
+          <div class="content flow">
             <router-view />
           </div>
         </div>

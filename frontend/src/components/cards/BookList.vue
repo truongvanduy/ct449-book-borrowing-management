@@ -1,4 +1,6 @@
 <script setup>
+import BookCard from './BookCard.vue'
+
 defineProps({
   book: {
     type: Array,
@@ -11,31 +13,12 @@ defineProps({
   <!-- <template> -->
   <div class="book-container">
     <div class="book-grid">
-      <div
-        class="book-card"
+      <BookCard
         v-for="item in book"
         :key="item.id"
+        :item="item"
       >
-        <template v-if="item">
-          <h4 class="book-title fs-6">
-            {{ item.volumeInfo.title }}
-          </h4>
-          <p class="book-authors">
-            {{
-              Array.isArray(item.volumeInfo.authors)
-                ? item.volumeInfo.authors.join(', ')
-                : item.volumeInfo.authors
-            }}
-          </p>
-          <img
-            :src="`/images/covers/${item.id}.jpg`"
-            :srcset="item.volumeInfo?.imageLinks?.thumbnail"
-            alt=""
-          />
-          <md-ripple></md-ripple>
-        </template>
-        <p v-else>Có gì đó sai sai</p>
-      </div>
+      </BookCard>
     </div>
   </div>
 </template>
@@ -43,8 +26,8 @@ defineProps({
 <style lang="scss">
 $maxColumnCount: 6;
 $minColumnSize: 12.5rem;
-$maxImageWidth: 25rem;
-$maxImageHeight: 25rem;
+$maxImageWidth: 20rem;
+$maxImageHeight: 20rem;
 $breakpoint: calc(
   $minColumnSize * $maxColumnCount + 1rem * ($maxColumnCount - 1) + 22.25rem
 ); // 22.25rem is the width of the rest

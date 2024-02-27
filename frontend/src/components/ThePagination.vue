@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 
 const { itemPerPage, itemCount } = defineProps({
   itemPerPage: {
@@ -9,20 +9,18 @@ const { itemPerPage, itemCount } = defineProps({
   itemCount: {
     type: Number,
     default: 100
-  },
-  currentPage: {
-    type: Number,
-    default: 1
   }
 })
 
 const emit = defineEmits(['changePage'])
 
+const currentPage = ref(1)
+
 const pageCount = computed(() => Math.ceil(itemCount / itemPerPage))
 let pages = computed(() => Array.from({ length: pageCount.value }, (_, i) => i + 1))
 
 const handlePageBtnClick = (page) => {
-  console.log(page)
+  currentPage.value = page
   emit('changePage', page)
 }
 </script>
@@ -32,15 +30,28 @@ const handlePageBtnClick = (page) => {
     class="pagination"
     v-if="itemCount && itemPerPage"
   >
-    <md-text-button
-      class="pagination-btn"
-      :class="{ active: page === currentPage }"
+    <template
       v-for="page in pages"
-      :selected="page === currentPage ? 'selected' : undefined"
       :key="page"
-      @click="handlePageBtnClick(page)"
-      >{{ page }}
-    </md-text-button>
+    >
+      <md-icon-button
+        v-if="page !== currentPage"
+        toggle
+        class="pagination-btn"
+        :selected="page === currentPage ? 'selected' : undefined"
+        @click="handlePageBtnClick(page)"
+        >{{ page }}
+      </md-icon-button>
+
+      <md-filled-icon-button
+        v-else
+        toggle
+        class="pagination-btn"
+        :selected="page === currentPage ? 'selected' : undefined"
+        @click="handlePageBtnClick(page)"
+        >{{ page }}
+      </md-filled-icon-button>
+    </template>
   </div>
   <p v-else>loading</p>
 </template>

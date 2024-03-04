@@ -9,18 +9,15 @@ defineProps({
 <template>
   <div class="book-card">
     <h4 class="book-title fs-6">
-      {{ item.volumeInfo.title }}
+      {{ item.title }}
     </h4>
     <p class="book-authors">
-      {{
-        Array.isArray(item.volumeInfo.authors)
-          ? item.volumeInfo.authors.join(', ')
-          : item.volumeInfo.authors
-      }}
+      {{ item.authorsName }}
+      <!-- {{ Array.isArray(item.authorsName) ? item.authorsName.join(', ') : item.authorsName }} -->
     </p>
     <img
       :src="`/images/covers/${item.id}.jpg`"
-      :srcset="item.volumeInfo?.imageLinks?.thumbnail"
+      :srcset="item?.imageLinks"
       alt=""
     />
     <md-ripple></md-ripple>

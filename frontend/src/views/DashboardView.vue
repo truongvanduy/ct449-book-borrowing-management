@@ -22,7 +22,7 @@ const handlePageChange = (page) => {
 }
 
 onMounted(async () => {
-  const response = await fetch('http://localhost:3000/')
+  const response = await fetch('http://localhost:3000/api/books/cards')
   items.value = await response.json()
 })
 </script>

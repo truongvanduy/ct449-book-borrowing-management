@@ -1,16 +1,28 @@
 const { name } = require('../../app');
 
 class BookService {
+  #detailGroupFields = {
+    description: { $first: '$description' },
+    pageCount: { $first: '$pageCount' },
+  };
+
   constructor(client) {
     this.Book = client.db().collection('books');
   }
+  #transformPipeline(detail = false) {
+    const groupFields = {
+      _id: '$_id',
+      title: { $first: '$title' },
+      imageSource: { $first: '$imageSource' },
+      authors: { $addToSet: '$authorDocs.name' },
+      categories: { $addToSet: '$categoryDocs.name' },
+    };
 
-  async getBookCards(filter = {}) {
-    return await this.Book.aggregate([
-      { $match: filter },
-      {
-        $unwind: '$authorIds',
-      },
+    if (detail) {
+      Object.assign(groupFields, this.#detailGroupFields);
+    }
+
+    return [
       {
         $lookup: {
           from: 'authors',
@@ -19,20 +31,37 @@ class BookService {
           as: 'authorDocs',
         },
       },
-      { $unwind: '$authorDocs' },
       {
-        $group: {
-          _id: '$_id',
-          title: { $first: '$title' },
-          imageLinks: { $first: '$imageLinks' },
-          authorsName: { $push: '$authorDocs.name' },
+        $lookup: {
+          from: 'categories',
+          localField: 'categoryIds',
+          foreignField: '_id',
+          as: 'categoryDocs',
         },
+      },
+      { $unwind: '$authorDocs' },
+      { $unwind: '$categoryDocs' },
+      {
+        $group: groupFields,
       },
       {
         $addFields: {
-          authorsName: {
+          authors: {
             $reduce: {
-              input: '$authorsName',
+              input: '$authors',
+              initialValue: '',
+              in: {
+                $cond: [
+                  { $eq: ['$$value', ''] },
+                  '$$this',
+                  { $concat: ['$$value', ', ', '$$this'] },
+                ],
+              },
+            },
+          },
+          categories: {
+            $reduce: {
+              input: '$categories',
               initialValue: '',
               in: {
                 $cond: [
@@ -45,12 +74,21 @@ class BookService {
           },
         },
       },
+    ];
+  }
+
+  async find(filter = {}) {
+    return await this.Book.aggregate([
+      { $match: filter },
+      ...this.#transformPipeline(),
     ]).toArray();
   }
 
-  async find(filter) {
-    const cursor = await this.Book.find(filter);
-    return await cursor.toArray();
+  async findOne(id) {
+    return await this.Book.aggregate([
+      { $match: { _id: id } },
+      ...this.#transformPipeline(true),
+    ]).toArray();
   }
 
   async findByTitle(title) {

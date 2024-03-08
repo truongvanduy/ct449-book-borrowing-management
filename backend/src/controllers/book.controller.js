@@ -3,32 +3,28 @@ const BookService = require('../services/book.service');
 const MongoDB = require('../utils/mongodb.util');
 
 const bookController = {
-  findOne: (req, res) => {
-    res.send('find one');
-  },
-  findAll: async (req, res, next) => {
-    let documents = [];
+  findOne: async (req, res, next) => {
+    const bookService = new BookService(MongoDB.client);
     try {
-      const bookService = new BookService(MongoDB.client);
-      const { name } = req.query;
-      if (name) {
-        documents = await bookService.findByTitle(name);
-      } else {
-        documents = await bookService.find({});
+      const [document] = await bookService.findOne(req.params.id);
+      if (!document) {
+        return next(new ApiError(404, 'Book not found'));
       }
-      console.log('here');
-      return res.send(documents);
+      return res.send(document);
     } catch (error) {
       return next(
-        new ApiError(500, 'An error occurred while retrieving books. ' + error)
+        new ApiError(
+          500,
+          'An error occurred while retrieving book card: ' + error
+        )
       );
     }
   },
-  getBookCards: async (req, res, next) => {
+  findAll: async (_req, res, next) => {
     let documents = [];
     try {
       const bookService = new BookService(MongoDB.client);
-      documents = await bookService.getBookCards();
+      documents = await bookService.find();
       return res.json(documents);
     } catch (error) {
       return next(

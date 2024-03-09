@@ -5,9 +5,30 @@ const router = createRouter({
   routes: [
     {
       path: '/',
+      name: 'home',
+      component: () => import('../views/HomeView.vue')
+    },
+    {
+      path: '/books',
+      name: 'books',
+      component: () => import('../views/BooksView.vue')
+    },
+    {
+      path: '/books/:id',
+      name: 'bookDetail',
+      component: () => import('../views/BookDetailView.vue')
+    },
+    {
+      path: '/dashboard',
       name: 'dashboard',
       component: () => import('../views/DashboardView.vue')
     },
+    {
+      path: '/authentication',
+      name: 'authentication',
+      component: () => import('../views/AuthenticationView.vue')
+    },
+
     {
       path: '/settings',
       name: 'settings',

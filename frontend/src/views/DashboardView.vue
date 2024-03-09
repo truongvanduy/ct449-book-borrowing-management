@@ -1,9 +1,6 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue'
 import BookList from '@/components/cards/BookList.vue'
-// import bookSource from '@/assets/json/philosophy.json'
-// import bookSource from '@/assets/json/bussiness_and_economics.json'
-// import bookSource from '@/assets/json/computers.json'
 import ThePagination from '@/components/ThePagination.vue'
 
 // let items = bookSource
@@ -22,7 +19,7 @@ const handlePageChange = (page) => {
 }
 
 onMounted(async () => {
-  const response = await fetch('http://localhost:3000/api/books/cards')
+  const response = await fetch('http://localhost:3000/api/books')
   items.value = await response.json()
 })
 </script>

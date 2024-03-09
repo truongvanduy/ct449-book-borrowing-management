@@ -23,7 +23,7 @@ function onEnter(e) {
       name="search"
       :onkeyup="onEnter"
       on
-      placeholder="Search for books"
+      placeholder="Tìm kiếm sách"
     >
       <md-icon-button
         type="submit"

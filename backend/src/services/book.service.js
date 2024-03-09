@@ -4,6 +4,9 @@ class BookService {
   #detailGroupFields = {
     description: { $first: '$description' },
     pageCount: { $first: '$pageCount' },
+    publisher: { $addToSet: '$publisherDocs.name' },
+    publishedDate: { $first: '$publishedDate' },
+    language: { $first: '$language' },
   };
 
   constructor(client) {
@@ -39,8 +42,17 @@ class BookService {
           as: 'categoryDocs',
         },
       },
+      {
+        $lookup: {
+          from: 'publishers',
+          localField: 'publisherId',
+          foreignField: '_id',
+          as: 'publisherDocs',
+        },
+      },
       { $unwind: '$authorDocs' },
       { $unwind: '$categoryDocs' },
+      { $unwind: '$publisherDocs' },
       {
         $group: groupFields,
       },

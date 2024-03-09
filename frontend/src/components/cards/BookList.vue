@@ -26,8 +26,6 @@ defineProps({
 <style lang="scss">
 $maxColumnCount: 6;
 $minColumnSize: 12.5rem;
-$maxImageWidth: 20rem;
-$maxImageHeight: 20rem;
 $breakpoint: calc(
   $minColumnSize * $maxColumnCount + 1rem * ($maxColumnCount - 1) + 22.25rem
 ); // 22.25rem is the width of the rest
@@ -45,32 +43,6 @@ $breakpoint: calc(
     @media (min-width: $breakpoint) {
       grid-template-columns: repeat($maxColumnCount, minmax($minColumnSize, 1fr));
     }
-  }
-
-  &-card {
-    position: relative;
-    background-color: var(--md-sys-color-surface-container);
-
-    padding: 1rem;
-    border-radius: 1rem;
-
-    display: grid;
-    grid-row: span 3;
-    gap: 0.25rem;
-    grid-template-rows: subgrid;
-    & img {
-      width: min(100%, $maxImageWidth);
-      max-height: $maxImageHeight;
-      margin-top: auto;
-      object-fit: contain;
-    }
-  }
-  &-title,
-  &-authors {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
   }
 }
 </style>

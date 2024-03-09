@@ -1,0 +1,38 @@
+<script setup>
+import { computed, onMounted, ref } from 'vue'
+import BookList from '@/components/cards/BookList.vue'
+import ThePagination from '@/components/ThePagination.vue'
+
+// let items = bookSource
+const items = ref([])
+const itemPerPage = ref(12)
+const currentPage = ref(1)
+
+const displayedItems = computed(() => {
+  const start = (currentPage.value - 1) * itemPerPage.value
+  const end = start + itemPerPage.value
+  return items.value.slice(start, end)
+})
+
+const handlePageChange = (page) => {
+  currentPage.value = page
+}
+
+onMounted(async () => {
+  const response = await fetch('http://localhost:3000/api/books')
+  items.value = await response.json()
+})
+</script>
+
+<template>
+  <h1 class="fs-2">Thư viện</h1>
+
+  <ThePagination
+    v-if="items.length"
+    :itemCount="items.length"
+    :itemPerPage="itemPerPage"
+    @changePage="handlePageChange"
+  >
+    <BookList :book="displayedItems" />
+  </ThePagination>
+</template>

@@ -1,9 +1,10 @@
 <script setup>
 import SearchBar from './SearchBar.vue'
 import NavigationButton from '../navigation/NavigationButton.vue'
-import MdIconButton from '../buttons/MdIconButton.vue'
 import ThemePicker from './ThemePicker.vue'
 import UserMenu from './UserMenu.vue'
+import LogoWithoutText from '../logos/LogoWithoutText.vue'
+import LogoWithText from '../logos/LogoWithText.vue'
 </script>
 
 <template>
@@ -21,9 +22,9 @@ import UserMenu from './UserMenu.vue'
       <!-- Logo -->
       <div class="logo">
         <router-link to="/">
-          <md-icon-button>
-            <md-icon class="material-symbols-rounded">home</md-icon>
-          </md-icon-button>
+          <div class="logo">
+            <LogoWithText />
+          </div>
         </router-link>
       </div>
     </div>

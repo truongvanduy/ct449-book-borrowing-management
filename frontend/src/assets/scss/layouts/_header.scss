@@ -10,5 +10,10 @@
   &-start {
     display: flex;
     align-items: center;
+    column-gap: calc((80px - 48px) / 2 + 8px);
   }
+}
+
+.logo {
+  width: 150px;
 }

@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import bookService from '../../services/book.service'
+import bookService from '@/services/book.service'
 import ContentHeader from '@/components/ContentHeader.vue'
 import { useSignInDialogStore } from '@/stores/SignInDialogStore'
 
@@ -94,3 +94,4 @@ function showDialog() {
   }
 }
 </style>
+../services/book.service

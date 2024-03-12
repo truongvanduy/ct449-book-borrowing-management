@@ -18,3 +18,7 @@ https://www.bisg.org/complete-bisac-subject-headings-list
 ## Logo
 
 https://looka.com/editor/175857884
+
+## Layout switching
+
+https://stackoverflow.com/questions/76711990/how-to-prevent-view-re-rendering-inside-dynamic-layout-when-route-and-therefore

@@ -1,5 +1,6 @@
 <script setup>
 import BookSection from '@/components/BookSection.vue'
+import bookService from '@/services/book.service'
 import { onMounted, ref } from 'vue'
 
 const books = ref([])
@@ -9,16 +10,18 @@ const economicsBooks = ref([])
 const maxBooksPerSection = 6
 
 onMounted(async () => {
-  const data = await fetch('http://localhost:3000/api/books')
-  books.value = await data.json()
-
-  suggestedBooks.value = books.value.slice(0, maxBooksPerSection)
-  philosophyBooks.value = books.value
-    .filter((book) => book.categories === 'Triết học')
-    .slice(0, maxBooksPerSection)
-  economicsBooks.value = books.value
-    .filter((book) => book.categories === 'Kinh tế')
-    .slice(0, maxBooksPerSection)
+  try {
+    books.value = await bookService.getAll()
+    suggestedBooks.value = books.value.slice(0, maxBooksPerSection)
+    philosophyBooks.value = books.value
+      .filter((book) => book.categories === 'Triết học')
+      .slice(0, maxBooksPerSection)
+    economicsBooks.value = books.value
+      .filter((book) => book.categories === 'Kinh tế')
+      .slice(0, maxBooksPerSection)
+  } catch (error) {
+    console.log(error)
+  }
 })
 </script>
 

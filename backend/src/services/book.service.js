@@ -12,6 +12,7 @@ class BookService {
   constructor(client) {
     this.Book = client.db().collection('books');
   }
+
   #transformPipeline(detail = false) {
     const groupFields = {
       _id: '$_id',

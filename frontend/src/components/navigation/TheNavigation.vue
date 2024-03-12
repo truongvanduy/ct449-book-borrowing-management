@@ -1,15 +1,25 @@
 <script setup>
 import { storeToRefs } from 'pinia'
-import NavigationList from './NavigationList.vue'
+import NavigationList from '@/components/navigation/NavigationList.vue'
 
 import { ref } from 'vue'
 import { useMenuStore } from '@/stores/MenuStore'
 
 const navItems = ref([
   {
+    name: 'Home',
+    icon: 'home',
+    url: '/'
+  },
+  {
+    name: 'Books',
+    icon: 'books',
+    url: '/books'
+  },
+  {
     name: 'Dashboard',
     icon: 'dashboard',
-    url: '/'
+    url: '/dashboard'
   },
   {
     name: 'Settings',

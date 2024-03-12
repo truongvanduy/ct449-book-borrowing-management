@@ -1,4 +1,4 @@
-@use '../abstracts' as *;
+@use '../utilities/variables' as *;
 
 .search {
   --_search-max-width: var(--search-max-width, 25rem);

@@ -1,57 +1,38 @@
+<script setup>
+import { computed, onMounted, ref } from 'vue'
+import BookList from '@/components/cards/BookList.vue'
+import ThePagination from '@/components/ThePagination.vue'
+
+// let items = bookSource
+const items = ref([])
+const itemPerPage = ref(12)
+const currentPage = ref(1)
+
+const displayedItems = computed(() => {
+  const start = (currentPage.value - 1) * itemPerPage.value
+  const end = start + itemPerPage.value
+  return items.value.slice(start, end)
+})
+
+const handlePageChange = (page) => {
+  currentPage.value = page
+}
+
+onMounted(async () => {
+  const response = await fetch('http://localhost:3000/api/books')
+  items.value = await response.json()
+})
+</script>
+
 <template>
-  <h1 class="heading h1">Dashboard</h1>
-  <md-outlined-select>
-    <md-select-option aria-label="blank"></md-select-option>
-    <md-select-option
-      selected
-      value="apple"
-    >
-      <div slot="headline">Apple</div>
-    </md-select-option>
-    <md-select-option value="apricot">
-      <div slot="headline">Apricot</div>
-    </md-select-option>
-  </md-outlined-select>
+  <h1 class="fs-2">Gợi ý cho bạn</h1>
 
-  <md-filled-select>
-    <md-select-option aria-label="blank"></md-select-option>
-    <md-select-option value="apple">
-      <div slot="headline">Apple</div>
-    </md-select-option>
-    <md-select-option value="apricot">
-      <div slot="headline">Apricot</div>
-    </md-select-option>
-  </md-filled-select>
-  <md-filled-button>Filled</md-filled-button>
-  <md-elevated-button>Elevated</md-elevated-button>
-  <md-outlined-button>Outlined</md-outlined-button>
-  <md-filled-text-field
-    label="Label"
-    value="Value"
+  <ThePagination
+    v-if="items.length"
+    :itemCount="items.length"
+    :itemPerPage="itemPerPage"
+    @changePage="handlePageChange"
   >
-  </md-filled-text-field>
-
-  <md-outlined-text-field
-    label="Label"
-    value="Value"
-  >
-  </md-outlined-text-field>
-  <md-outlined-select>
-    <md-select-option aria-label="blank"></md-select-option>
-    <md-select-option
-      selected
-      value="apple"
-    >
-      <div slot="headline">Apple</div>
-    </md-select-option>
-    <md-select-option value="apricot">
-      <div slot="headline">Apricot</div>
-    </md-select-option>
-  </md-outlined-select>
-  <md-chip-set>
-    <md-assist-chip label="Assist"></md-assist-chip>
-    <md-filter-chip label="Filter"></md-filter-chip>
-    <md-input-chip label="Input"></md-input-chip>
-    <md-suggestion-chip label="Suggestion"></md-suggestion-chip>
-  </md-chip-set>
+    <BookList :book="displayedItems" />
+  </ThePagination>
 </template>

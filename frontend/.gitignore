@@ -14,6 +14,10 @@ dist-ssr
 coverage
 *.local
 
+public/images/covers/books
+public/images/covers/download.js
+src/assets/json
+
 /cypress/videos/
 /cypress/screenshots/
 

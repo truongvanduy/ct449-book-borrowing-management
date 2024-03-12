@@ -20,7 +20,7 @@ function closeDialog() {
 
 const router = useRouter()
 function toAuthentication() {
-  router.push('/authentication')
+  router.push({ name: 'sign-in-email' })
   closeDialog()
 }
 </script>

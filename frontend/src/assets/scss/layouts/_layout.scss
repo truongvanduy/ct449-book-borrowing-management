@@ -5,7 +5,8 @@
 }
 
 .pane {
-  height: calc(100dvh - var(--header-height) - var(--content-margin));
+  --content-height: calc(100dvh - var(--header-height) - var(--content-margin));
+  height: var(--content-height);
   overflow: auto;
 
   background-color: var(--md-sys-color-surface-container-lowest);

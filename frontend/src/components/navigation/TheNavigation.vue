@@ -1,6 +1,6 @@
 <script setup>
 import { storeToRefs } from 'pinia'
-import NavigationList from './NavigationList.vue'
+import NavigationList from '@/components/navigation/NavigationList.vue'
 
 import { ref } from 'vue'
 import { useMenuStore } from '@/stores/MenuStore'

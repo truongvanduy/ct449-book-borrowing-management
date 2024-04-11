@@ -13,10 +13,10 @@ const loading = ref(false)
 const getEmail = async () => {
   try {
     loading.value = true
-    const respones = await userService.getByEmail(email.value)
+    const response = await userService.getByEmail(email.value)
     loading.value = false
 
-    userId.value = respones.data._id
+    userId.value = response.data._id
     router.push({ name: 'sign-in-password', params: { id: userId.value } })
   } catch (err) {
     loading.value = false

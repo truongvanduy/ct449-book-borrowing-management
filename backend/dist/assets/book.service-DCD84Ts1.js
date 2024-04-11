@@ -1,0 +1,1 @@
+import{s as t}from"./index-Dl1616DY.js";class e{constructor(a="/api/books"){this.api=t(a)}async getAll(a){return(await this.api.get("",{params:a})).data}async create(a){return(await this.api.post("/",a)).data}async get(a){return(await this.api.get(`/${a}`)).data}}const r=new e;export{r as b};

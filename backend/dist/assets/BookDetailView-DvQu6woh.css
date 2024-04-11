@@ -1,0 +1,1 @@
+.content-header{position:relative;display:flex;align-items:center;column-gap:2rem;container:container/inline-size}@container container (width > 65rem){.content-header md-icon-button{position:absolute}}.book-single-grid{display:grid;grid-template-columns:1fr 2fr;grid-gap:2rem}.book-single-img{max-width:20rem}.chip md-icon{font-size:1.125rem}

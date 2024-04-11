@@ -11,6 +11,7 @@ const app = express();
 // middleware
 app.use(morgan('dev'));
 app.use(cors());
+app.use(express.static('dist'));
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
@@ -36,5 +37,12 @@ app.use((err, req, res, next) => {
     message: err.message || 'Internal Server Error.',
   });
 });
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(__dirname + '/dist/'));
+  app.get('*', (req, res) => {
+    res.sendFile(__dirname + '/dist/index.html');
+  });
+}
 
 module.exports = app;

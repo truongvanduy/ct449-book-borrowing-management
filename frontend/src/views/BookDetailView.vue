@@ -4,6 +4,7 @@ import { useRoute } from 'vue-router'
 import bookService from '@/services/book.service'
 import ContentHeader from '@/components/ContentHeader.vue'
 import { useSignInDialogStore } from '@/stores/SignInDialogStore'
+import MdIcon from '@/components/icons/MdIcon.vue'
 
 const route = useRoute()
 const book = ref(() => ({}))
@@ -39,6 +40,23 @@ function showDialog() {
       >
         <h2 class="fs-4">{{ book.title }}</h2>
         <md-assist-chip :label="book.categories"></md-assist-chip>
+        <md-filter-chip
+          class="ml-2"
+          label="Có sẵn tại thư viện"
+          selected
+          @click.prevent="() => {}"
+        ></md-filter-chip>
+        <md-assist-chip
+          class="chip"
+          label="Tạm hết"
+          disabled
+        >
+          <MdIcon
+            slot="icon"
+            :style="'filled'"
+            >close</MdIcon
+          >
+        </md-assist-chip>
         <p
           v-if="book.authors"
           class="fs-6"
@@ -69,6 +87,7 @@ function showDialog() {
         >
           Ngày xuất bản: {{ book.publishedDate }}
         </p>
+
         <div>
           <md-filled-button
             class="ml-auto mt-4"
@@ -92,6 +111,9 @@ function showDialog() {
   &-img {
     max-width: 20rem;
   }
+}
+.chip md-icon {
+  font-size: 1.125rem;
 }
 </style>
 ../services/book.service

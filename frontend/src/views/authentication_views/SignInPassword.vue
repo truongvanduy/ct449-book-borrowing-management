@@ -119,7 +119,7 @@ async function handleSignIn() {
   </AuthenticationLayout>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .chip md-icon {
   font-size: 1.125rem;
 }

@@ -20,12 +20,18 @@ router.route('/api/user/:id').get(userController.findById);
 router
   .route('/api/borrowings/')
   .get(requireAuth, checkUser, borrowingController.index)
-  .post(requireAuth, checkUser, borrowingController.show)
-  .patch(requireAuth, checkUser, borrowingController.register);
-
-router
-  .route('/api/borrowings/:bookId')
-  .get(requireAuth, checkUser, borrowingController.findOne);
+  .post(
+    requireAuth,
+    checkUser,
+    borrowingController.findOne,
+    borrowingController.show
+  )
+  .patch(
+    requireAuth,
+    checkUser,
+    borrowingController.findOne,
+    borrowingController.register
+  );
 
 router.route('/api/signin').post(userController.signin);
 router.route('/api/signout').post(userController.signout);

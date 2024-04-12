@@ -26,7 +26,7 @@ const borrowingController = {
       const borrowingService = new BorrowingService(MongoDB.client);
       const exitstingBorrowing = await borrowingService.findOne({
         userId: req.user._id,
-        bookId: req.params.bookId,
+        bookId: req.body.bookId,
       });
       if (exitstingBorrowing) {
         if (
@@ -36,7 +36,7 @@ const borrowingController = {
           return next(new ApiError(404, 'Bạn đang mượn sách này'));
         }
       }
-      return res.send({ status: 'ok' });
+      return next();
     } catch (error) {
       return next(new ApiError(500, 'Internal server error'));
     }

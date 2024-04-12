@@ -23,21 +23,13 @@ onMounted(async () => {
   }
 })
 
-async function handleOnBorrowClicked() {
-  try {
-    const response = await borrowService.get(route.params.id)
-    if (response.status === 'ok') {
-      router.push({
-        name: 'borrowing.create',
-        props: {
-          id: book.value.id
-        }
-      })
+function handleOnBorrowClicked() {
+  router.push({
+    name: 'borrowing.create',
+    props: {
+      id: book.value.id
     }
-    console.log(response)
-  } catch (error) {
-    console.error(error)
-  }
+  })
 }
 </script>
 <template>

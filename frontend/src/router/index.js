@@ -17,9 +17,15 @@ let routes = [
     component: () => import('@/views/BookDetailView.vue')
   },
   {
-    path: '/dashboard',
-    name: 'dashboard',
-    component: () => import('@/views/DashboardView.vue')
+    path: '/borrowings/:id',
+    name: 'borrowing.create',
+    component: () => import('@/views/BookBorrowingView.vue'),
+    props: true
+  },
+  {
+    path: '/my-borrowings',
+    name: 'borrowings',
+    component: () => import('@/views/BorrowingsView.vue')
   },
   {
     path: '/auth',
@@ -67,7 +73,7 @@ let routes = [
   {
     path: '/:pathMatch(.*)*',
     name: 'FallBack',
-    component: () => import('@/views/DashboardView.vue')
+    component: () => import('@/views/BorrowingsView.vue')
   }
 ]
 

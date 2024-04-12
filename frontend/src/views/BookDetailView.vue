@@ -1,27 +1,43 @@
 <script setup>
 import { onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import bookService from '@/services/book.service'
 import ContentHeader from '@/components/ContentHeader.vue'
-import { useSignInDialogStore } from '@/stores/SignInDialogStore'
-import MdIcon from '@/components/icons/MdIcon.vue'
+import borrowService from '@/services/borrow.service'
 
 const route = useRoute()
+const router = useRouter()
 const book = ref(() => ({}))
 
 const regionNamesInVietnamese = new Intl.DisplayNames(['vi'], { type: 'language' })
 
 onMounted(async () => {
-  book.value = await bookService.get(route.params.id)
-  if (!book.value.language) {
-    book.value.language = 'en'
+  try {
+    book.value = await bookService.get(route.params.id)
+    if (!book.value.language) {
+      book.value.language = 'en'
+    }
+    console.log(book.value)
+  } catch (error) {
+    console.log(error)
   }
 })
 
-// Sign in to borrow a book
-const signInDialog = useSignInDialogStore()
-function showDialog() {
-  signInDialog.open()
+async function handleOnBorrowClicked() {
+  try {
+    const response = await borrowService.get(route.params.id)
+    if (response.status === 'ok') {
+      router.push({
+        name: 'borrowing.create',
+        props: {
+          id: book.value.id
+        }
+      })
+    }
+    console.log(response)
+  } catch (error) {
+    console.error(error)
+  }
 }
 </script>
 <template>
@@ -41,22 +57,12 @@ function showDialog() {
         <h2 class="fs-4">{{ book.title }}</h2>
         <md-assist-chip :label="book.categories"></md-assist-chip>
         <md-filter-chip
+          v-if="book.quantity > book.borrowed"
           class="ml-2"
           label="Có sẵn tại thư viện"
           selected
           @click.prevent="() => {}"
         ></md-filter-chip>
-        <md-assist-chip
-          class="chip"
-          label="Tạm hết"
-          disabled
-        >
-          <MdIcon
-            slot="icon"
-            :style="'filled'"
-            >close</MdIcon
-          >
-        </md-assist-chip>
         <p
           v-if="book.authors"
           class="fs-6"
@@ -90,9 +96,15 @@ function showDialog() {
 
         <div>
           <md-filled-button
+            v-if="book.quantity > book.borrowed"
             class="ml-auto mt-4"
-            @click="showDialog()"
+            @click="handleOnBorrowClicked()"
             >Mượn sách</md-filled-button
+          >
+          <md-filled-button
+            disabled
+            v-else
+            >Tạm hết</md-filled-button
           >
         </div>
       </div>
@@ -116,4 +128,3 @@ function showDialog() {
   font-size: 1.125rem;
 }
 </style>
-../services/book.service

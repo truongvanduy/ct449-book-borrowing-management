@@ -1,7 +1,8 @@
 const express = require('express');
 const bookController = require('../controllers/book.controller');
 const userController = require('../controllers/user.controller');
-const { requireAuth } = require('../middleware/auth.middleware');
+const { requireAuth, checkUser } = require('../middleware/auth.middleware');
+const borrowingController = require('../controllers/borrowing.controller');
 
 const router = express.Router();
 
@@ -15,8 +16,18 @@ router
   .post(userController.create);
 router.route('/api/user/:id').get(userController.findById);
 
-router.route('/api/signin').post(userController.signin);
+// Borrowing
+router
+  .route('/api/borrowings/')
+  .get(requireAuth, checkUser, borrowingController.index)
+  .post(requireAuth, checkUser, borrowingController.show)
+  .patch(requireAuth, checkUser, borrowingController.register);
 
+router
+  .route('/api/borrowings/:bookId')
+  .get(requireAuth, checkUser, borrowingController.findOne);
+
+router.route('/api/signin').post(userController.signin);
 router.route('/api/signout').post(userController.signout);
 
 module.exports = router;

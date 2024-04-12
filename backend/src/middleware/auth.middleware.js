@@ -2,10 +2,10 @@ const jwt = require('jsonwebtoken');
 const ApiError = require('../api-error');
 const UserService = require('../services/user.service');
 const MongoDB = require('../utils/mongodb.util');
+const { ObjectId } = require('mongodb');
 
 const requireAuth = (req, res, next) => {
   const token = req?.cookies?.jwt;
-  console.log(req.cookies);
 
   if (!token) {
     return next(new ApiError(401, 'Unauthorized'));
@@ -19,11 +19,11 @@ const requireAuth = (req, res, next) => {
   });
 };
 
-const checkUser = (req, res, next) => {
+const checkUser = async (req, res, next) => {
   const token = req.cookies?.jwt;
 
   if (!token) {
-    res.locals.user = null;
+    req.user = null;
     return next();
   }
 
@@ -32,14 +32,17 @@ const checkUser = (req, res, next) => {
     process.env.JWT_SECRET || 'secret',
     async (err, decodedToken) => {
       if (err) {
-        console.log(error.mesage);
-        res.locals.user = null;
+        console.log(err.message);
+        req.user = null;
         return next();
       }
 
       const userService = new UserService(MongoDB.client);
-      let user = await userService.findOne({ _id: decodedToken.id });
-      res.locals.user = user;
+      let user = await userService.findOne({
+        _id: new ObjectId(decodedToken.id),
+      });
+
+      req.user = user;
       return next();
     }
   );

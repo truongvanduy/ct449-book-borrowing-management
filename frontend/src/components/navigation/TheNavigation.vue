@@ -7,29 +7,19 @@ import { useMenuStore } from '@/stores/MenuStore'
 
 const navItems = ref([
   {
-    name: 'Home',
+    name: 'Trang chủ',
     icon: 'home',
     url: '/'
   },
   {
-    name: 'Books',
+    name: 'Thư viện',
     icon: 'books',
     url: '/books'
   },
   {
-    name: 'Dashboard',
+    name: 'Đang mượn',
     icon: 'dashboard',
-    url: '/dashboard'
-  },
-  {
-    name: 'Settings',
-    icon: 'settings',
-    url: '/settings'
-  },
-  {
-    name: 'Users Management',
-    icon: 'manage_accounts',
-    url: '/users-management'
+    url: '/my-borrowings'
   }
 ])
 

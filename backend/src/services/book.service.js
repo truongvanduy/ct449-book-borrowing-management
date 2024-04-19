@@ -7,6 +7,8 @@ class BookService {
     publisher: { $addToSet: '$publisherDocs.name' },
     publishedDate: { $first: '$publishedDate' },
     language: { $first: '$language' },
+    quantity: { $first: '$quantity' },
+    borrowed: { $first: '$borrowed' },
   };
 
   constructor(client) {

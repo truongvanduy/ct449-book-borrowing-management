@@ -10,6 +10,7 @@ const borrowingController = {
       const borrowingService = new BorrowingService(MongoDB.client);
       const exitstingBorrowing = await borrowingService.findAll({
         userId: req.user._id,
+        status: { $ne: 'initialized' },
       });
       if (!exitstingBorrowing) {
         return next(new ApiError(404, 'Không tìm thấy phiếu mượn'));
@@ -18,6 +19,31 @@ const borrowingController = {
       return res.send(exitstingBorrowing);
     } catch (error) {
       return next(new ApiError(500, 'Internal server error'));
+    }
+  },
+
+  verifyBorrowing: async (req, res, next) => {
+    if (!req?.params?.bookId) {
+      return next(new ApiError(404, 'Không tìm thấy sách'));
+    }
+
+    try {
+      const borrowingService = new BorrowingService(MongoDB.client);
+      const exitstingBorrowing = await borrowingService.findOne({
+        userId: req.user._id,
+        bookId: req.params.bookId,
+      });
+      if (exitstingBorrowing != null) {
+        if (
+          exitstingBorrowing.status !== 'initialized' &&
+          exitstingBorrowing.status !== 'returned'
+        ) {
+          return next(new ApiError(404, 'Bạn đang mượn sách này'));
+        }
+      }
+      return next();
+    } catch (error) {
+      return next(new ApiError(500, 'Có lỗi xảy ra'));
     }
   },
 
@@ -51,7 +77,6 @@ const borrowingController = {
         userId: req.user._id,
         bookId: bookId,
       });
-      console.log(exitstingBorrowing);
       if (exitstingBorrowing && exitstingBorrowing.status === 'initialized') {
         return res.send({ ...exitstingBorrowing });
       }
@@ -60,9 +85,9 @@ const borrowingController = {
       const borrowing = await borrowingService.create({
         userId: req.user._id,
         bookId: bookId,
-        registered_at: new Date(now).toISOString(),
-        pickup_at: new Date(now + 259200000).toISOString(),
-        return_at: new Date(now + 2592000000).toISOString(),
+        registered_at: new Date(now),
+        pickup_at: new Date(now + 259200000),
+        return_at: new Date(now + 2592000000),
         status: 'initialized',
       });
       if (!borrowing) {

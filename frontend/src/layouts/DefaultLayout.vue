@@ -3,17 +3,9 @@ import TheNavigation from '@/components/navigation/TheNavigation.vue'
 import TheHeader from '@/components/header/TheHeader.vue'
 import { useThemeStore } from '@/stores/ThemeStore'
 import { storeToRefs } from 'pinia'
-import SignInDialog from '@/components/SignInDialog.vue'
-import { onMounted, ref } from 'vue'
 
 const themeStore = useThemeStore()
 const { theme } = storeToRefs(themeStore)
-
-const dialog = ref(null)
-
-onMounted(() => {
-  dialog.value.$el.show()
-})
 </script>
 
 <template>
@@ -34,7 +26,6 @@ onMounted(() => {
       </div>
     </main>
   </div>
-  <SignInDialog ref="dialog" />
 </template>
 
 <style>

@@ -4,6 +4,7 @@ import AuthenticationLayout from '@/layouts/AuthenticationLayout.vue'
 import userService from '@/services/user.service'
 import { onMounted, ref } from 'vue'
 import MdIcon from '@/components/icons/MdIcon.vue'
+import { useSnackBarStore } from '@/stores/SnackBarStore'
 const { id } = defineProps({
   id: String
 })
@@ -45,6 +46,11 @@ async function handleSignIn() {
 
     router.push({
       name: 'home'
+    })
+    const snackbarStore = useSnackBarStore()
+    snackbarStore.show({
+      type: 'success',
+      message: 'Đăng nhập thành công'
     })
   } catch (error) {
     console.log(error)

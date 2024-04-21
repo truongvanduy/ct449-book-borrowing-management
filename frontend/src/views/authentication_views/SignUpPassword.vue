@@ -4,6 +4,7 @@ import AuthenticationLayout from '@/layouts/AuthenticationLayout.vue'
 import userService from '@/services/user.service'
 import { onMounted, ref } from 'vue'
 import MdIcon from '@/components/icons/MdIcon.vue'
+import { useSnackBarStore } from '@/stores/SnackBarStore'
 const { email } = defineProps({
   email: String
 })
@@ -28,6 +29,11 @@ async function handleSignUp() {
     if (result) {
       router.push({ name: 'sign-in-email' })
     }
+    const snackbarStore = useSnackBarStore()
+    snackbarStore.show({
+      type: 'success',
+      message: 'Tạo tài khoản thành công'
+    })
   } catch (error) {
     errorMessage.value = error.response.data.message
   }

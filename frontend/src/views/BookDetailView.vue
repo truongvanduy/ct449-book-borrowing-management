@@ -3,7 +3,10 @@ import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import bookService from '@/services/book.service'
 import ContentHeader from '@/components/ContentHeader.vue'
+import { useSnackBarStore } from '@/stores/SnackBarStore'
 import borrowService from '@/services/borrow.service'
+
+const SERVER_BASE_URL = ref(import.meta.env.VITE_SERVER_BASE_URL)
 
 const route = useRoute()
 const router = useRouter()
@@ -17,19 +20,32 @@ onMounted(async () => {
     if (!book.value.language) {
       book.value.language = 'en'
     }
-    console.log(book.value)
   } catch (error) {
     console.log(error)
   }
 })
 
-function handleOnBorrowClicked() {
-  router.push({
-    name: 'borrowing.create',
-    props: {
-      id: book.value.id
+async function handleOnBorrowClicked() {
+  try {
+    await borrowService.check(book.value._id)
+    router.push({
+      name: 'borrowing.create',
+      props: {
+        id: book.value.id
+      }
+    })
+  } catch (error) {
+    const snackbarStore = useSnackBarStore()
+    snackbarStore.show({
+      type: 'error',
+      message: error.response.data.message || 'Có lỗi xảy ra'
+    })
+    if (error.response.status === 401) {
+      router.push({
+        name: 'sign-in-email'
+      })
     }
-  })
+  }
 }
 </script>
 <template>
@@ -38,7 +54,7 @@ function handleOnBorrowClicked() {
     <div class="book-single-grid">
       <div class="book-single-img pr-4">
         <img
-          :src="book.imageSource"
+          :src="SERVER_BASE_URL + book.imageSource"
           alt=""
         />
       </div>

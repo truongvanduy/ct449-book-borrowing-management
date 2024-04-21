@@ -4,12 +4,15 @@ import bookService from '@/services/book.service'
 import ContentHeader from '@/components/ContentHeader.vue'
 import borrowService from '@/services/borrow.service'
 import { useRouter } from 'vue-router'
+import { useSnackBarStore } from '@/stores/SnackBarStore'
 const { id } = defineProps({
   id: {
     type: String,
     require: true
   }
 })
+
+const SERVER_BASE_URL = ref(import.meta.env.VITE_SERVER_BASE_URL)
 
 const router = useRouter()
 const book = ref(() => ({}))
@@ -19,10 +22,13 @@ onMounted(async () => {
   try {
     book.value = await bookService.get(id)
     borrowing.value = await borrowService.create(id)
-    console.log(borrowing.value)
   } catch (error) {
-    console.log(error)
-    throw error
+    console.error(error)
+    const snackbarStore = useSnackBarStore()
+    snackbarStore.show({
+      type: 'error',
+      message: error?.response?.data?.message || 'Có lỗi xảy ra'
+    })
   }
 })
 
@@ -43,7 +49,7 @@ async function handleOnBorrowClicked() {
     <div class="book-single-grid">
       <div class="book-single-img pr-4">
         <img
-          :src="book.imageSource"
+          :src="SERVER_BASE_URL + book.imageSource"
           alt=""
         />
       </div>

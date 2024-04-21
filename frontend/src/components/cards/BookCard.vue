@@ -1,4 +1,5 @@
 <script setup>
+import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 defineProps({
@@ -9,6 +10,12 @@ defineProps({
 })
 
 const router = useRouter()
+
+const SERVER_BASE_URL = ref(import.meta.env.VITE_SERVER_BASE_URL)
+
+onMounted(() => {
+  console.log(`${SERVER_BASE_URL.value}`)
+})
 </script>
 <template>
   <div
@@ -24,8 +31,7 @@ const router = useRouter()
     <div class="book-img">
       <span class="book-category">{{ item.categories }}</span>
       <img
-        :src="`/images/covers/${item.id}.jpg`"
-        :srcset="item?.imageSource"
+        :src="`${SERVER_BASE_URL}${item?.imageSource}`"
         alt=""
       />
     </div>

@@ -23,7 +23,7 @@ export default defineConfig({
     port: 5173,
     proxy: {
       '/api': {
-        target: 'http://localhost:3000',
+        target: import.meta?.env?.VITE_SERVER_BASE_URL || 'http://localhost:3000',
         changeOrigin: true
       }
     }

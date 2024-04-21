@@ -48,3 +48,8 @@ video {
   height: auto;
   background-repeat: no-repeat;
 }
+
+ul[class] {
+  list-style: none;
+  padding: 0;
+}

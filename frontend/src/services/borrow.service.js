@@ -9,8 +9,12 @@ class BookService {
     return (await this.api.get('/')).data
   }
 
-  async get(bookId) {
-    return (await this.api.get(`/${bookId}`)).data
+  // async get(bookId) {
+  //   return (await this.api.get(`/${bookId}`)).data
+  // }
+
+  async check(bookId) {
+    return await this.api.get(`/${bookId}`)
   }
 
   async create(bookId) {

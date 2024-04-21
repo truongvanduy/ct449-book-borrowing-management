@@ -4,7 +4,34 @@ class BorrowingService {
   }
 
   async findAll(filter) {
-    return (await this.Borrowing.find(filter)).toArray();
+    // return (await this.Borrowing.find(filter)).toArray();
+    return await this.Borrowing.aggregate([
+      { $match: filter },
+      {
+        $lookup: {
+          from: 'books',
+          localField: 'bookId',
+          foreignField: '_id',
+          as: 'book',
+        },
+      },
+      {
+        $unwind: '$book',
+      },
+      {
+        $project: {
+          _id: 1,
+          userId: 1,
+          bookId: 1,
+          registered_at: 1,
+          pickup_at: 1,
+          return_at: 1,
+          status: 1,
+          'book.title': 1,
+          'book.imageSource': 1,
+        },
+      },
+    ]).toArray();
   }
 
   async findOne(filter) {

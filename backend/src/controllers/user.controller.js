@@ -75,7 +75,11 @@ const userController = {
         return next(new ApiError(400, 'Địa chỉ email đã tồn tại'));
       }
 
-      const insertedId = await userService.create({ email, password });
+      const insertedId = await userService.create({
+        email,
+        password,
+        role: 'user',
+      });
 
       // Set cookies
       const token = createToken(insertedId);

@@ -1,5 +1,7 @@
 const ApiError = require('../api-error');
+const AuthorService = require('../services/author.service');
 const BookService = require('../services/book.service');
+const PublisherService = require('../services/publisher.service');
 const MongoDB = require('../utils/mongodb.util');
 
 const bookController = {
@@ -39,6 +41,62 @@ const bookController = {
           'An error occurred while retrieving book cards. ' + error
         )
       );
+    }
+  },
+  create: async (req, res, next) => {
+    try {
+      // Get authors
+      const authorService = new AuthorService(MongoDB.client);
+      const authors = await authorService.findAll({});
+      if (!authors) {
+        return next(new ApiError(404, 'Authors not found'));
+      }
+
+      // Get publishers
+      const publisherService = new PublisherService(MongoDB.client);
+      const publishers = await publisherService.findAll({});
+      if (!publishers) {
+        return next(new ApiError(404, 'Publishers not found'));
+      }
+
+      return res.send({ authors, publishers });
+    } catch (error) {
+      return next(new ApiError(500, 'Internal server error'));
+    }
+  },
+  store: async (req, res, next) => {
+    const bookService = new BookService(MongoDB.client);
+    const data = req.body;
+    const file = req.files[0];
+    try {
+      if (!data || !file) {
+        return next(new ApiError(400, 'Invalid data'));
+      }
+
+      const {
+        title,
+        authors,
+        publisher,
+        publishedDate,
+        categories,
+        quantity,
+        price,
+      } = data;
+      const { filename } = file;
+      // validate data
+      if (
+        !title ||
+        !authors ||
+        !publisher ||
+        !publishedDate ||
+        !categories ||
+        !quantity ||
+        !price
+      ) {
+        return next(new ApiError(400, 'Invalid data'));
+      }
+    } catch (error) {
+      return next(new ApiError(500, 'Internal server error'));
     }
   },
 };

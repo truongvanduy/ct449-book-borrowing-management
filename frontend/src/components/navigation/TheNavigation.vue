@@ -2,24 +2,44 @@
 import { storeToRefs } from 'pinia'
 import NavigationList from '@/components/navigation/NavigationList.vue'
 
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useMenuStore } from '@/stores/MenuStore'
+
+onMounted(() => {
+  const user = JSON.parse(localStorage.getItem('user'))
+  if (user?.role === 'admin') {
+    navItems.value = [
+      {
+        name: 'Quản lý phiếu mượn',
+        icon: 'home',
+        url: '/',
+        urlName: 'admin.borrowings'
+      },
+      {
+        name: 'Quản lý sách',
+        icon: 'books',
+        url: '/books',
+        urlName: 'admin.books'
+      }
+    ]
+  }
+})
 
 const navItems = ref([
   {
     name: 'Trang chủ',
     icon: 'home',
-    url: '/'
+    urlName: 'home'
   },
   {
     name: 'Thư viện',
     icon: 'books',
-    url: '/books'
+    urlName: 'books'
   },
   {
     name: 'Đang mượn',
     icon: 'dashboard',
-    url: '/my-borrowings'
+    urlName: 'borrowings'
   }
 ])
 

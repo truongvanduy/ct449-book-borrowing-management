@@ -6,8 +6,8 @@ const jwt = require('jsonwebtoken');
 
 const maxAge = 3 * 24 * 60 * 60;
 
-function createToken(id) {
-  return jwt.sign({ id }, process.env.JWT_SECRET || 'secret', {
+function createToken(payload) {
+  return jwt.sign(payload, process.env.JWT_SECRET || 'secret', {
     expiresIn: maxAge,
   });
 }
@@ -26,6 +26,7 @@ const userController = {
       return res.send({
         _id: user._id,
         email: user.email,
+        role: user.role,
       });
     } catch (error) {
       return next(
@@ -36,7 +37,6 @@ const userController = {
 
   findByEmail: async (req, res, next) => {
     const { email } = req.query;
-    console.log('email', email);
 
     if (email === undefined || email === '') {
       return next(new ApiError(400, 'Vui lòng nhập email'));
@@ -82,7 +82,10 @@ const userController = {
       });
 
       // Set cookies
-      const token = createToken(insertedId);
+      const token = createToken({
+        id: insertedId,
+        role: 'user',
+      });
       res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
 
       return res.send({ message: 'User ' + insertedId + ' created' });
@@ -109,7 +112,10 @@ const userController = {
       const user = await userService.signin(email, password);
 
       // Set cookies
-      const token = createToken(user._id);
+      const token = createToken({
+        id: user._id,
+        role: user.role,
+      });
       res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
 
       res.send({ id: user._id });

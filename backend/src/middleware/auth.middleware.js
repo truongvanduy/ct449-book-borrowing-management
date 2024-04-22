@@ -47,5 +47,37 @@ const checkUser = async (req, res, next) => {
     }
   );
 };
+const checkAdmin = async (req, res, next) => {
+  const token = req.cookies?.jwt;
 
-module.exports = { requireAuth, checkUser };
+  if (!token) {
+    req.admin = null;
+    return next();
+  }
+
+  jwt.verify(
+    token,
+    process.env.JWT_SECRET || 'secret',
+    async (err, decodedToken) => {
+      if (err) {
+        console.log(err.message);
+        req.admin = null;
+        return next();
+      }
+
+      const userService = new UserService(MongoDB.client);
+      let user = await userService.findOne({
+        _id: new ObjectId(decodedToken.id),
+      });
+      if (user.role !== 'admin') {
+        req.admin = null;
+        return next();
+      }
+
+      req.admin = user;
+      return next();
+    }
+  );
+};
+
+module.exports = { requireAuth, checkUser, checkAdmin };

@@ -2,6 +2,7 @@
 import BookSection from '@/components/BookSection.vue'
 import bookService from '@/services/book.service'
 import { onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 const books = ref([])
 const suggestedBooks = ref([])
@@ -9,7 +10,13 @@ const philosophyBooks = ref([])
 const economicsBooks = ref([])
 const maxBooksPerSection = 6
 
+const router = useRouter()
 onMounted(async () => {
+  const user = JSON.parse(localStorage.getItem('user'))
+  if (user?.role === 'admin') {
+    router.replace({ name: 'admin.borrowings' })
+  }
+
   try {
     books.value = await bookService.getAll()
     suggestedBooks.value = books.value.slice(0, maxBooksPerSection)

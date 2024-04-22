@@ -33,16 +33,23 @@ const errorMessage = ref('')
 
 async function handleSignIn() {
   try {
+    // Authenticate
     loading.value = true
     const response = await userService.signIn({
       email: user.value?.email,
       password: password.value
     })
 
+    // Find user info and set to localStorage
     const { id } = response.data
-    const userInfo = await userService.getById(id)
-
-    localStorage.setItem('user', JSON.stringify(userInfo.data))
+    const { data } = await userService.getById(id)
+    localStorage.setItem(
+      'user',
+      JSON.stringify({
+        _id: data._id,
+        role: data.role
+      })
+    )
 
     router.push({
       name: 'home'

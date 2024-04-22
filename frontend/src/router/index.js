@@ -59,7 +59,6 @@ let routes = [
       }
     ]
   },
-
   {
     path: '/settings',
     name: 'settings',
@@ -69,6 +68,22 @@ let routes = [
     path: '/users-management',
     name: 'users-management',
     component: () => import('@/views/UsersManagementView.vue')
+  },
+  // Admin routes
+  {
+    path: '/admin/borrowings',
+    name: 'admin.borrowings',
+    component: () => import('@/views/admin_views/BorrowingsManagement.vue')
+  },
+  {
+    path: '/admin/books',
+    name: 'admin.books',
+    component: () => import('@/views/admin_views/BooksManagement.vue')
+  },
+  {
+    path: '/admin/books/create',
+    name: 'admin.books.create',
+    component: () => import('@/views/admin_views/BookForm.vue')
   },
   {
     path: '/:pathMatch(.*)*',

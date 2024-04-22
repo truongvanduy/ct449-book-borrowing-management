@@ -51,5 +51,6 @@ $fontSizes: (
 @each $size, $value in $fontSizes {
   .fs-#{$size} {
     font-size: $value;
+    line-height: 1.2;
   }
 }

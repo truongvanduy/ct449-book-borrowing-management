@@ -22,6 +22,7 @@ class BookService {
       imageSource: { $first: '$imageSource' },
       authors: { $addToSet: '$authorDocs.name' },
       categories: { $addToSet: '$categoryDocs.name' },
+      quantity: { $first: '$quantity' },
     };
 
     if (detail) {
@@ -111,6 +112,11 @@ class BookService {
       title: { $regex: new RegExp(title) },
       $options: 'i',
     });
+  }
+
+  async create(data) {
+    const { insertedId } = await this.Book.insertOne(data);
+    return insertedId;
   }
 }
 

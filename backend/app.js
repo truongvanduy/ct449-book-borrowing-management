@@ -18,10 +18,9 @@ app.use(express.static('public'));
 app.use(express.json());
 
 app.get('*', checkUser);
-app.use(router);
+app.use('/api', router);
 
 // Handle 404 response
-
 app.use((req, res, next) => {
   return next(new ApiError(404, 'Resource not found.'));
 });

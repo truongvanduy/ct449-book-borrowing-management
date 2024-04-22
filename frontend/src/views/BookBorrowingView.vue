@@ -37,6 +37,11 @@ async function handleOnBorrowClicked() {
     const response = await borrowService.register(id)
     if (response.status === 'ok') {
       router.push({ name: 'borrowings' })
+      const snackbarStore = useSnackBarStore()
+      snackbarStore.show({
+        type: 'success',
+        message: 'Đăng ký mượn thành công'
+      })
     }
   } catch (error) {
     console.log(error)

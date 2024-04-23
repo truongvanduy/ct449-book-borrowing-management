@@ -31,7 +31,7 @@ const user = computed(() => JSON.parse(localStorage.getItem('user')))
       </div>
     </div>
     <!-- Search -->
-    <SearchBar v-if="user.role !== 'admin'" />
+    <SearchBar v-if="user?.role !== 'admin'" />
     <!-- Keep the header in same height -->
     <div
       v-else

@@ -93,7 +93,7 @@ async function handleOnBorrowClicked() {
           v-if="book.publisher"
           class="fs-6"
         >
-          Nhà xuất bản: {{ book.publisher?.join('') }}
+          Nhà xuất bản: {{ book.publisher }}
         </p>
         <p
           v-if="book.publishedDate"

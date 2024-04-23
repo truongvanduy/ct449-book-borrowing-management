@@ -1,14 +1,22 @@
+const { ObjectId } = require('mongodb');
 const ApiError = require('../api-error');
 const AuthorService = require('../services/author.service');
 const BookService = require('../services/book.service');
+const CategoryService = require('../services/category.service');
 const PublisherService = require('../services/publisher.service');
 const MongoDB = require('../utils/mongodb.util');
+const idUtil = require('../utils/id.util');
 
 const bookController = {
   findOne: async (req, res, next) => {
+    let id = req.params.id;
+    if (!id) {
+      return next(new ApiError(400, 'Invalid book ID'));
+    }
+    id = idUtil(id);
     const bookService = new BookService(MongoDB.client);
     try {
-      const [document] = await bookService.findOne(req.params.id);
+      const [document] = await bookService.findOne(id);
 
       if (!document) {
         return next(new ApiError(404, 'Book not found'));
@@ -59,7 +67,14 @@ const bookController = {
         return next(new ApiError(404, 'Publishers not found'));
       }
 
-      return res.send({ authors, publishers });
+      // Get categories
+      const categoryService = new CategoryService(MongoDB.client);
+      const categories = await categoryService.findAll({});
+      if (!categories) {
+        return next(new ApiError(404, 'Categories not found'));
+      }
+
+      return res.send({ authors, publishers, categories });
     } catch (error) {
       return next(new ApiError(500, 'Internal server error'));
     }
@@ -68,33 +83,43 @@ const bookController = {
     const bookService = new BookService(MongoDB.client);
     const data = req.body;
     const file = req.files[0];
-    try {
-      if (!data || !file) {
-        return next(new ApiError(400, 'Invalid data'));
-      }
+    console.log(data);
+    if (!data || !file) {
+      return next(new ApiError(400, 'Invalid data'));
+    }
+    console.log(file);
+    // Validate data
+    if (
+      !data?.title ||
+      !data?.author ||
+      !data?.publisher ||
+      !data?.category ||
+      !data?.quantity ||
+      !file
+    ) {
+      return next(new ApiError(400, 'Invalid data values'));
+    }
+    console.log(file);
 
-      const {
-        title,
-        authors,
-        publisher,
-        publishedDate,
-        categories,
-        quantity,
-        price,
-      } = data;
-      const { filename } = file;
-      // validate data
-      if (
-        !title ||
-        !authors ||
-        !publisher ||
-        !publishedDate ||
-        !categories ||
-        !quantity ||
-        !price
-      ) {
-        return next(new ApiError(400, 'Invalid data'));
+    // Filter data
+    const filteredData = {
+      title: data.title,
+      authorIds: [parseInt(data.author)],
+      publisherId: parseInt(data.publisher),
+      categoryIds: [parseInt(data.category)],
+      quantity: parseInt(data.quantity) >= 0 ? parseInt(data.quantity) : 0,
+      publishedDate: data.publishedDate || '',
+      description: data.description || '',
+      imageSource: `/images/covers/${file.filename}`,
+    };
+
+    try {
+      const bookService = new BookService(MongoDB.client);
+      const insertedId = await bookService.create(filteredData);
+      if (!insertedId) {
+        return next(new ApiError(500, 'An error occurred while creating book'));
       }
+      res.send({ message: 'Thêm sách thành công' });
     } catch (error) {
       return next(new ApiError(500, 'Internal server error'));
     }

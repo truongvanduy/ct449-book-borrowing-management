@@ -3,6 +3,7 @@ const ApiError = require('../api-error');
 const BookService = require('../services/book.service');
 const BorrowingService = require('../services/borrowing.service');
 const MongoDB = require('../utils/mongodb.util');
+const idUtil = require('../utils/id.util');
 
 const borrowingController = {
   index: async (req, res, next) => {
@@ -23,15 +24,16 @@ const borrowingController = {
   },
 
   verifyBorrowing: async (req, res, next) => {
-    if (!req?.params?.bookId) {
+    let bookId = req?.params?.bookId;
+    if (!bookId) {
       return next(new ApiError(404, 'Không tìm thấy sách'));
     }
-
+    bookId = idUtil(bookId);
     try {
       const borrowingService = new BorrowingService(MongoDB.client);
       const exitstingBorrowing = await borrowingService.findOne({
         userId: req.user._id,
-        bookId: req.params.bookId,
+        bookId,
       });
       if (exitstingBorrowing != null) {
         if (
@@ -52,7 +54,7 @@ const borrowingController = {
       const borrowingService = new BorrowingService(MongoDB.client);
       const exitstingBorrowing = await borrowingService.findOne({
         userId: req.user._id,
-        bookId: req.body.bookId,
+        bookId: idUtil(req.body.bookId),
       });
       if (exitstingBorrowing) {
         if (
@@ -70,12 +72,12 @@ const borrowingController = {
 
   show: async (req, res, next) => {
     try {
-      const { bookId } = req.body;
-
+      let { bookId } = req.body;
+      bookId = idUtil(bookId);
       const borrowingService = new BorrowingService(MongoDB.client);
       const exitstingBorrowing = await borrowingService.findOne({
         userId: req.user._id,
-        bookId: bookId,
+        bookId,
       });
       if (exitstingBorrowing && exitstingBorrowing.status === 'initialized') {
         return res.send({ ...exitstingBorrowing });
@@ -106,13 +108,13 @@ const borrowingController = {
 
   register: async (req, res, next) => {
     try {
-      const { bookId } = req.body;
-
+      let { bookId } = req.body;
+      bookId = idUtil(bookId);
       const borrowingService = new BorrowingService(MongoDB.client);
       const result = await borrowingService.update(
         {
           userId: req.user._id,
-          bookId: bookId,
+          bookId,
           status: 'initialized',
         },
         {

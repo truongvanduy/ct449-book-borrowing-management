@@ -21,6 +21,19 @@ class BookAdminService {
       })
     ).data
   }
+  async update(data) {
+    return (
+      await this.api.patch('/edit', data, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+    ).data
+  }
+
+  async delete(id) {
+    return (await this.api.delete(`/${id}/delete`)).data
+  }
 }
 
 export default new BookAdminService()

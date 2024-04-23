@@ -88,6 +88,19 @@ class BookService {
               },
             },
           },
+          publisher: {
+            $reduce: {
+              input: '$publisher',
+              initialValue: '',
+              in: {
+                $cond: [
+                  { $eq: ['$$value', ''] },
+                  '$$this',
+                  { $concat: ['$$value', ', ', '$$this'] },
+                ],
+              },
+            },
+          },
         },
       },
     ];
@@ -117,6 +130,14 @@ class BookService {
   async create(data) {
     const { insertedId } = await this.Book.insertOne(data);
     return insertedId;
+  }
+
+  async upsert(query, data) {
+    return await this.Book.updateOne(query, { $set: data }, { upsert: true });
+  }
+
+  async deleteOne(query) {
+    return await this.Book.deleteOne(query);
   }
 }
 

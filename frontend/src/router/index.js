@@ -86,6 +86,12 @@ let routes = [
     component: () => import('@/views/admin_views/BookForm.vue')
   },
   {
+    path: '/admin/books/:id/edit',
+    name: 'admin.books.edit',
+    component: () => import('@/views/admin_views/BookForm.vue'),
+    props: true
+  },
+  {
     path: '/:pathMatch(.*)*',
     name: 'FallBack',
     component: () => import('@/views/BorrowingsView.vue')

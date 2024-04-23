@@ -67,8 +67,8 @@ async function reject(id, index) {
   <div
     v-else
     class="container"
-    style="--container-width: 100rem"
   >
+    <h1 class="fs-2 mb-8">Quản lý phiếu mượn</h1>
     <table class="table table-solid text-center mx-auto">
       <thead>
         <tr>

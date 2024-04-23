@@ -1,76 +1,126 @@
 <script setup>
 import ContentHeader from '@/components/ContentHeader.vue'
 import bookAdminService from '@/services/book.admin.service'
+import bookService from '@/services/book.service'
 import { useSnackBarStore } from '@/stores/SnackBarStore'
 import getErrorMessage from '@/utils/getErrorMessage.util'
 import { onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 
-// const SERVER_BASE_URL = ref(import.meta.env.VITE_SERVER_BASE_URL)
+const { id } = defineProps({
+  id: {
+    type: String,
+    default: ''
+  }
+})
 
+const SERVER_BASE_URL = ref(import.meta.env.VITE_SERVER_BASE_URL)
+
+// Load data
 const authors = ref([])
 const publishers = ref([])
+const categories = ref([])
+const existingBook = ref(null)
 const snackbarStore = useSnackBarStore()
 
 const loading = ref(true)
+const router = useRouter()
 
 onMounted(async () => {
   try {
     loading.value = true
     const result = await bookAdminService.create()
+    categories.value = result?.categories
     authors.value = result?.authors
     publishers.value = result?.publishers
+
+    // Display existing book
+    if (id !== '') {
+      existingBook.value = await bookService.get(id)
+
+      title.value = existingBook.value?.title || ''
+      // Assign init value with the existing author id
+      author.value = authors.value.find((author) => existingBook.value?.authors === author.name)._id
+      // Assign init value with the existing catgory id
+      category.value = categories.value.find(
+        (category) => existingBook.value?.categories === category.name
+      )._id
+      // Assign init value with the existing publisher id
+      publisher.value = publishers.value.find(
+        (publisher) => existingBook.value?.publisher === publisher.name
+      )._id
+      language.value = existingBook.value?.language
+      publishedDate.value = existingBook.value?.publishedDate || ''
+      quantity.value = existingBook.value?.quantity || ''
+      pageCount.value = existingBook.value?.pageCount || ''
+      description.value = existingBook.value?.description || ''
+      previewUrl.value = `${SERVER_BASE_URL.value}${existingBook.value?.imageSource}`
+      image.value = existingBook.value?.image || ''
+    }
   } catch (error) {
     snackbarStore.show({
       type: 'error',
       message: error?.response?.data?.message || 'Có lỗi xảy ra'
     })
+    router.go(-1)
   }
   loading.value = false
 })
+
+// Handle input
 const form = ref(null)
 const title = ref('')
-const author = ref('')
+const author = ref()
+const category = ref('')
 const publisher = ref('')
 const publishedDate = ref('')
-const quantity = ref(0)
-const pageCount = ref(0)
-const language = ref('')
+const quantity = ref('')
+const pageCount = ref('')
+const language = ref()
 const description = ref('')
 const image = ref(null)
+const previewUrl = ref('')
+
+// Preview image
+function handleImageChange(e) {
+  const file = e?.target?.files[0]
+  previewUrl.value = URL.createObjectURL(file)
+}
 
 async function handleSubmit() {
-  const data = {
-    title: title.value,
-    author: author.value,
-    publisher: publisher.value,
-    publishedDate: publishedDate.value,
-    quantity: quantity.value,
-    pageCount: pageCount.value,
-    language: language.value,
-    description: description.value,
-    image: image.value.files[0]
-  }
   const formData = new FormData()
-  const { elements } = form.value
-  console.log(elements.title)
-  formData.set('title', data.title)
-  formData.set('author', data.author)
-  formData.set('publisher', data.publisher)
-  formData.set('publishedDate', data.publishedDate)
-  formData.set('quantity', data.quantity)
-  formData.set('pageCount', data.pageCount)
-  formData.set('language', data.language)
-  formData.set('description', data.description)
-  formData.set('image', data.image)
-  console.log(formData.values())
+  formData.set('_id', id)
+  formData.set('title', title.value)
+  formData.set('author', author.value)
+  formData.set('category', category.value)
+  formData.set('publisher', publisher.value)
+  formData.set('publishedDate', publishedDate.value)
+  formData.set('quantity', quantity.value)
+  formData.set('pageCount', pageCount.value)
+  formData.set('language', language.value)
+  formData.set('description', description.value)
+  formData.set('image', image.value.files[0])
   try {
-    const response = await bookAdminService.store(formData)
+    loading.value = true
+
+    let response = ''
+    if (!id) {
+      response = await bookAdminService.store(formData)
+    } else {
+      response = await bookAdminService.update(formData)
+    }
+    router.push({ name: 'admin.books' })
+    snackbarStore.show({
+      type: 'success',
+      message: response?.message || 'Thêm sách thành công'
+    })
   } catch (error) {
     snackbarStore.show({
       type: 'error',
       message: getErrorMessage(error)
     })
   }
+  loading.value = false
 }
 </script>
 
@@ -85,7 +135,7 @@ async function handleSubmit() {
       class="container"
       style="--container-width: 30rem"
     >
-      <h2 class="fs-2 mb-4">Thêm sách mới</h2>
+      <h2 class="fs-2 mb-4">{{ id ? 'Cập nhật sách' : 'Thêm sách mới' }}</h2>
 
       <!-- Form -->
       <form
@@ -113,7 +163,7 @@ async function handleSubmit() {
           >
             <md-select-option
               aria-label="blank"
-              selected
+              :selected="!id"
             >
               <div slot="headline">Chọn tác giả</div>
             </md-select-option>
@@ -122,12 +172,36 @@ async function handleSubmit() {
                 v-for="author in authors"
                 :key="author._id"
                 :value="author._id"
+                :selected="existingBook && author.name === existingBook.authors"
               >
                 <div slot="headline">{{ author.name }}</div>
               </md-select-option>
             </template>
           </md-outlined-select>
         </div>
+        <!-- Category -->
+        <md-outlined-select
+          class="form-dropdown"
+          name="category"
+          v-model="category"
+        >
+          <md-select-option
+            aria-label="blank"
+            :selected="!id"
+          >
+            <div slot="headline">Chọn thể loại</div>
+          </md-select-option>
+          <template v-if="categories.length > 0">
+            <md-select-option
+              v-for="category in categories"
+              :key="category._id"
+              :value="category._id"
+              :selected="existingBook && category.name === existingBook.categories"
+            >
+              <div slot="headline">{{ category.name }}</div>
+            </md-select-option>
+          </template>
+        </md-outlined-select>
 
         <!-- Publish -->
         <div class="form-control">
@@ -139,7 +213,7 @@ async function handleSubmit() {
           >
             <md-select-option
               aria-label="blank"
-              selected
+              :selected="!id"
             >
               <div slot="headline">Chọn nhà xuất bản</div>
             </md-select-option>
@@ -148,8 +222,11 @@ async function handleSubmit() {
                 v-for="publisher in publishers"
                 :key="publisher._id"
                 :value="publisher._id"
+                :selected="existingBook && publisher.name === existingBook.publisher"
               >
-                <div slot="headline">{{ publisher.name }}</div>
+                <div slot="headline">
+                  {{ publisher.name }}
+                </div>
               </md-select-option>
             </template>
           </md-outlined-select>
@@ -193,14 +270,20 @@ async function handleSubmit() {
           >
             <md-select-option
               aria-label="blank"
-              selected
+              :selected="!id"
             >
               <div slot="headline">Chọn ngôn ngữ</div>
             </md-select-option>
-            <md-select-option value="en">
+            <md-select-option
+              value="en"
+              :selected="existingBook && existingBook.language === 'en'"
+            >
               <div slot="headline">Tiếng Anh</div>
             </md-select-option>
-            <md-select-option value="vi">
+            <md-select-option
+              value="vi"
+              :selected="existingBook && existingBook.language === 'vi'"
+            >
               <div slot="headline">Tiếng Việt</div>
             </md-select-option>
           </md-outlined-select>
@@ -221,6 +304,12 @@ async function handleSubmit() {
 
         <!-- Image -->
         <div class="form-control">
+          <div class="form-preview">
+            <img
+              :src="previewUrl"
+              alt=""
+            />
+          </div>
           <input
             ref="image"
             accept="image/*"
@@ -228,6 +317,7 @@ async function handleSubmit() {
             name="image"
             id="image"
             class="form-image"
+            @change="handleImageChange"
           />
         </div>
 
@@ -256,9 +346,20 @@ async function handleSubmit() {
     margin-left: auto;
     width: min(100%, 15ch);
   }
+  &-preview {
+    height: 58px;
+    width: 50px;
+    border: 1px solid #888;
+    border-radius: 4px;
+    & img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
   &-image {
     padding: 1rem;
-    border: 1px solid #999;
+    border: 1px solid #888;
     border-radius: 4px;
     width: 100%;
     font-size: 1rem;

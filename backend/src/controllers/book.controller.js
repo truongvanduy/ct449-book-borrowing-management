@@ -124,6 +124,69 @@ const bookController = {
       return next(new ApiError(500, 'Internal server error'));
     }
   },
+  update: async (req, res, next) => {
+    const bookService = new BookService(MongoDB.client);
+    const data = req.body;
+    console.log(data);
+    if (!data) {
+      return next(new ApiError(400, 'Invalid data'));
+    }
+    // Validate data
+    if (
+      !data?._id ||
+      !data?.title ||
+      !data?.author ||
+      !data?.publisher ||
+      !data?.category ||
+      !data?.quantity
+    ) {
+      return next(new ApiError(400, 'Invalid data values'));
+    }
+
+    // Filter data
+    const _id = idUtil(data._id);
+    const filteredData = {
+      title: data.title,
+      authorIds: [parseInt(data.author)],
+      publisherId: parseInt(data.publisher),
+      categoryIds: [parseInt(data.category)],
+      quantity: parseInt(data.quantity) >= 0 ? parseInt(data.quantity) : 0,
+      publishedDate: data.publishedDate || '',
+      description: data.description || '',
+      language: data.language || '',
+    };
+
+    let file = null;
+    if (req?.files && req.files.length > 0) {
+      file = req.files[0];
+      filteredData.imageSource = `/images/covers/${file.filename}`;
+    }
+
+    try {
+      const response = await bookService.upsert({ _id }, filteredData);
+      if (!response) {
+        return next(new ApiError(500, 'An error occurred while creating book'));
+      }
+      res.send({ message: 'Cập nhật sách thành công' });
+    } catch (error) {
+      return next(new ApiError(500, 'Internal server error'));
+    }
+  },
+  destroy: async (req, res, next) => {
+    try {
+      let { id } = req.params;
+      console.log(id);
+      id = idUtil(id);
+      const bookService = new BookService(MongoDB.client);
+      const response = await bookService.deleteOne({ _id: id });
+      if (!response) {
+        return next(new ApiError(500, 'An error occurred while deleting book'));
+      }
+      res.send({ message: 'Xóa sách thành công' });
+    } catch (error) {
+      return next(new ApiError(500, 'Internal server error'));
+    }
+  },
 };
 
 module.exports = bookController;

@@ -31,7 +31,12 @@ const user = computed(() => JSON.parse(localStorage.getItem('user')))
       </div>
     </div>
     <!-- Search -->
-    <SearchBar />
+    <SearchBar v-if="user.role !== 'admin'" />
+    <!-- Keep the header in same height -->
+    <div
+      v-else
+      style="height: 56px"
+    ></div>
     <!-- End -->
     <div class="header-end">
       <!-- Sign in button -->

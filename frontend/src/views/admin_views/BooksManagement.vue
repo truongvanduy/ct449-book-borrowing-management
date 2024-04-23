@@ -3,12 +3,18 @@ import MdIconButton from '@/components/buttons/MdIconButton.vue'
 import MdFloatingActionButton from '@/components/buttons/MdFloatingActionButton.vue'
 import bookService from '@/services/book.service'
 import { useSnackBarStore } from '@/stores/SnackBarStore'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import MdIcon from '@/components/icons/MdIcon.vue'
+import bookAdminService from '@/services/book.admin.service'
+import getErrorMessage from '@/utils/getErrorMessage.util'
+import SearchBar from '@/components/SearchBar.vue'
 
+// Init state
 const loading = ref(true)
 const books = ref([])
 const SERVER_BASE_URL = ref(import.meta.env.VITE_SERVER_BASE_URL)
+const snackbarStore = useSnackBarStore()
 
 onMounted(async () => {
   try {
@@ -17,7 +23,6 @@ onMounted(async () => {
     books.value = await bookService.getAll()
   } catch (error) {
     console.error(error)
-    const snackbarStore = useSnackBarStore()
     snackbarStore.show({
       type: 'error',
       message: error.response.data.message || 'Có lỗi xảy ra'
@@ -26,10 +31,71 @@ onMounted(async () => {
   loading.value = false
 })
 
+// Hanlde search
+const searchText = ref('')
+
+async function updateBookList() {
+  try {
+    loading.value = true
+
+    books.value = await bookService.getAll({ q: searchText.value })
+  } catch (error) {
+    snackbarStore.show({
+      type: 'error',
+      message: error.response.data.message || 'Có lỗi xảy ra'
+    })
+  }
+  loading.value = false
+}
+
+// Handle actions
 const router = useRouter()
 function showCreate() {
   router.push({ name: 'admin.books.create' })
 }
+
+function handleEditClick(id) {
+  router.push({ name: 'admin.books.edit', params: { id } })
+}
+
+const dialogOpen = ref(false)
+const bookId = ref(null)
+function openDialog(id) {
+  dialogOpen.value = true
+  bookId.value = id
+}
+function closeDialog() {
+  dialogOpen.value = false
+}
+
+// Trigger reload content on successful deletetion
+const reload = ref(false)
+
+async function handleDeleteClick() {
+  dialogOpen.value = false
+
+  try {
+    loading.value = true
+    const response = await bookAdminService.delete(bookId.value)
+    reload.value = true
+    snackbarStore.show({
+      type: 'success',
+      message: response?.message || 'Xoá sách thành công'
+    })
+  } catch (error) {
+    console.log(error)
+    snackbarStore.show({
+      type: 'error',
+      message: getErrorMessage(error)
+    })
+  }
+  loading.value = false
+}
+
+watch(reload, async () => {
+  await updateBookList()
+  reload.value = false
+})
 </script>
 
 <template>
@@ -42,12 +108,24 @@ function showCreate() {
     class="container flow"
   >
     <h1 class="fs-2">Quản lý sách</h1>
-    <table class="table table-solid">
+
+    <!-- Search -->
+    <SearchBar
+      class="ml-auto"
+      v-model="searchText"
+      @submit="() => updateBookList()"
+    ></SearchBar>
+
+    <!-- Result table -->
+    <table
+      v-if="books.length > 0"
+      class="table table-solid table-book"
+    >
       <thead>
         <tr>
           <th>STT</th>
           <th>Tên sách</th>
-          <th>Số lượng</th>
+          <th style="text-wrap: nowrap">Số lượng</th>
           <th></th>
         </tr>
       </thead>
@@ -76,14 +154,55 @@ function showCreate() {
           <td class="text-center">{{ book.quantity }}</td>
           <td>
             <div class="book-row">
-              <MdIconButton>edit</MdIconButton>
-              <MdIconButton>delete</MdIconButton>
+              <MdIconButton @click="() => handleEditClick(book._id)">edit</MdIconButton>
+              <MdIconButton @click="() => openDialog(book._id)">delete</MdIconButton>
             </div>
           </td>
         </tr>
       </tbody>
     </table>
+
+    <!-- No result -->
+    <div
+      v-else
+      class="fs5"
+    >
+      Không tìm thấy sách. Vui lòng thử lại với từ khóa khác.
+    </div>
   </div>
+
+  <!-- Confirm Dialog -->
+  <md-dialog
+    style="max-width: 320px"
+    :open="dialogOpen"
+  >
+    <div slot="headline">Permanently delete?</div>
+    <MdIcon slot="icon">delete_outline</MdIcon>
+    <form
+      id="form"
+      slot="content"
+      method="dialog"
+    >
+      Deleting the selected photos will also remove them from all synced devices.
+    </form>
+    <div slot="actions">
+      <md-text-button
+        form="form"
+        value="delete"
+        @click="handleDeleteClick"
+        >Delete</md-text-button
+      >
+      <md-filled-tonal-button
+        form="form"
+        value="cancel"
+        autofocus
+        @click="closeDialog"
+        >Cancel</md-filled-tonal-button
+      >
+    </div>
+  </md-dialog>
+
+  <!-- Add FAB -->
   <MdFloatingActionButton
     :icon="'add'"
     :size="'large'"
@@ -94,6 +213,9 @@ function showCreate() {
 </template>
 
 <style lang="scss" scoped>
+.table-book {
+  width: 100%;
+}
 .book {
   &-row {
     display: flex;

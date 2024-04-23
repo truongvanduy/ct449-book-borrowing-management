@@ -27,5 +27,11 @@ adminRouter
   .route('/books/create')
   .get(requireAuth, checkAdmin, bookController.create)
   .post(requireAuth, checkAdmin, upload.any(), bookController.store);
+adminRouter
+  .route('/books/edit')
+  .patch(requireAuth, checkAdmin, upload.any(), bookController.update);
+adminRouter
+  .route('/books/:id/delete')
+  .delete(requireAuth, checkAdmin, bookController.destroy);
 
 module.exports = adminRouter;

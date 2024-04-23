@@ -2,8 +2,9 @@ const { ObjectId } = require('mongodb');
 
 module.exports = (id) => {
   if (typeof id !== 'string') {
-    id = id.toString();
+    id = id?.toString();
   }
+  if (!id) return id;
   if (id.length === 24) {
     return new ObjectId(id);
   }

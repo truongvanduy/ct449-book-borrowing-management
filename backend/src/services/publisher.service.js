@@ -21,6 +21,10 @@ class PublisherService {
   async update(query, data) {
     return await this.Publisher.updateOne(query, { $set: data });
   }
+
+  async deleteOne(query) {
+    return await this.Publisher.deleteOne(query);
+  }
 }
 
 module.exports = PublisherService;

@@ -92,6 +92,22 @@ let routes = [
     props: true
   },
   {
+    path: '/admin/publishers',
+    name: 'admin.publishers',
+    component: () => import('@/views/admin_views/PublishersManagement.vue')
+  },
+  {
+    path: '/admin/publishers/create',
+    name: 'admin.publishers.create',
+    component: () => import('@/views/admin_views/PublisherForm.vue')
+  },
+  {
+    path: '/admin/publishers/:id/edit',
+    name: 'admin.publishers.edit',
+    component: () => import('@/views/admin_views/PublisherForm.vue'),
+    props: true
+  },
+  {
     path: '/:pathMatch(.*)*',
     name: 'FallBack',
     component: () => import('@/views/BorrowingsView.vue')

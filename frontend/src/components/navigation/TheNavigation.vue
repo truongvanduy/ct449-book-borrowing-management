@@ -12,14 +12,17 @@ onMounted(() => {
       {
         name: 'Quản lý phiếu mượn',
         icon: 'home',
-        url: '/',
         urlName: 'admin.borrowings'
       },
       {
         name: 'Quản lý sách',
         icon: 'books',
-        url: '/books',
         urlName: 'admin.books'
+      },
+      {
+        name: 'Quản lý NXB',
+        icon: 'apartment',
+        urlName: 'admin.publishers'
       }
     ]
   }

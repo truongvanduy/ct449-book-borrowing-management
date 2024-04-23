@@ -37,6 +37,7 @@ onMounted(async () => {
     // Display existing book
     if (id !== '') {
       existingBook.value = await bookService.get(id)
+      console.log(existingBook.value)
 
       title.value = existingBook.value?.title || ''
       // Assign init value with the existing author id

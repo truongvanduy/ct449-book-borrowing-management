@@ -19,6 +19,20 @@ class BorrowingService {
         $unwind: '$book',
       },
       {
+        $lookup: {
+          from: 'users',
+          localField: 'userId',
+          foreignField: '_id',
+          as: 'user',
+        },
+      },
+      {
+        $unwind: '$user',
+      },
+      {
+        $sort: { registered_at: -1 },
+      },
+      {
         $project: {
           _id: 1,
           userId: 1,
@@ -29,6 +43,7 @@ class BorrowingService {
           status: 1,
           'book.title': 1,
           'book.imageSource': 1,
+          'user.email': 1,
         },
       },
     ]).toArray();

@@ -77,6 +77,7 @@ async function reject(id, index) {
           <th>Ngày ĐK</th>
           <th>Hạn trả</th>
           <th>Trạng thái</th>
+          <th></th>
           <!-- <th></th> -->
         </tr>
       </thead>
@@ -85,17 +86,19 @@ async function reject(id, index) {
           v-for="(borrowing, index) in borrowings"
           :key="borrowing._id"
         >
-          <td>{{ borrowing.userId }}</td>
+          <td>{{ borrowing.user.email }}</td>
           <td class="text-start">
             {{ borrowing.book.title }}
           </td>
           <td class="table-date">{{ getDateString(borrowing.registered_at) }}</td>
           <td class="table-date">{{ getDateString(borrowing.return_at) }}</td>
+          <td style="text-wrap: nowrap">
+            <span class="table-status-text">
+              {{ translateBorrowingStatus(borrowing.status) }}
+            </span>
+          </td>
           <td>
             <div class="table-status text-center">
-              <span class="table-status-text">
-                {{ translateBorrowingStatus(borrowing.status) }}
-              </span>
               <div
                 v-if="borrowing.status === 'registered'"
                 class="table-actions"
